@@ -30,8 +30,8 @@ Users.init(
             allowNull: false,
             validate: { len: [1, 60] },
         },
-        isBlocked: { type: DataTypes.TINYINT(), defaultValue: 0 },
-        isAdmin: { type: DataTypes.TINYINT(), defaultValue: 0 },
+        isBlocked: { type: DataTypes.BOOLEAN(), defaultValue: false,field:"is_blocked" },
+        isAdmin: { type: DataTypes.BOOLEAN(), defaultValue: false, field:"is_admin" },
     },
     { sequelize, tableName: "users", timestamps: false }
 );

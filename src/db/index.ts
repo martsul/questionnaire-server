@@ -3,18 +3,18 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
-const dbName = process.env.DB_NAME;
-const dbUser = process.env.DB_USER;
-const dbPassword = process.env.DB_PASSWORD;
-const dbHost = process.env.DB_HOST;
-const dbPort = process.env.DB_PORT;
+const dbUrl = process.env.DB_URL;
 
-if (!dbName || !dbUser || !dbPassword || !dbHost || !dbPort) {
+if (!dbUrl) {
     throw new Error("Missing database configuration in environment variables");
 }
 
-export const sequelize = new Sequelize(dbName, dbUser, dbPassword, {
-    host: dbHost,
-    port: Number(dbPort),
-    dialect: "mysql",
+export const sequelize = new Sequelize(dbUrl, {
+    dialect: "postgres",
+    dialectOptions: {
+        ssl: {
+            require: true,
+        }
+    },
+    // logging: false
 });

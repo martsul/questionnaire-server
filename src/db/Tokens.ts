@@ -24,9 +24,18 @@ Tokens.init(
                 model: Users,
                 key: "id",
             },
+            field: "user_id"
         },
-        accessToken: { type: DataTypes.STRING(512), allowNull: false },
-        refreshToken: { type: DataTypes.STRING(512), allowNull: false },
+        accessToken: {
+            type: DataTypes.STRING(512),
+            allowNull: false,
+            field: "access_token",
+        },
+        refreshToken: {
+            type: DataTypes.STRING(512),
+            allowNull: false,
+            field: "refresh_token",
+        },
     },
     {
         tableName: "tokens",

@@ -29,8 +29,9 @@ export class AuthorizationService {
     }
 
     async #hashingPassword() {
-        this.#password = await hash(this.#password, 3);
-        return this;
+        if (this.#password.length) {
+            this.#password = await hash(this.#password, 3);
+        }
     }
 
     async signin() {
