@@ -2,8 +2,8 @@ import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import { router } from "./router";
-import { testBDConnection } from "./helpers/test-bd-connection";
+import { router } from "./router/index.js";
+import { testBDConnection } from "./helpers/test-bd-connection.js";
 
 dotenv.config();
 

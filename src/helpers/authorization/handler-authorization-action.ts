@@ -1,8 +1,7 @@
-import { TokensService } from "../../service/tokens-service";
-import { AuthorizationBody } from "../../types/authorization-body";
-import { AuthorizationMethods } from "../../types/authorization-methods";
-import { authorizationUser } from "./authorization-user";
-
+import { TokensService } from "../../service/tokens-service.js";
+import { AuthorizationBody } from "../../types/authorization-body.js";
+import { AuthorizationMethods } from "../../types/authorization-methods.js";
+import { authorizationUser } from "./authorization-user.js";
 
 type Values = {
     action: AuthorizationMethods;

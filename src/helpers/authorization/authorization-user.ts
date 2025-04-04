@@ -1,6 +1,6 @@
-import { AuthorizationService } from "../../service/authorization-service";
-import { AuthorizationBody } from "../../types/authorization-body";
-import { AuthorizationMethods } from "../../types/authorization-methods";
+import { AuthorizationService } from "../../service/authorization-service.js";
+import { AuthorizationBody } from "../../types/authorization-body.js";
+import { AuthorizationMethods } from "../../types/authorization-methods.js";
 
 
 export const authorizationUser = async (

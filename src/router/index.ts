@@ -1,8 +1,7 @@
 import { Router } from "express";
-import { sequelize } from "../db";
 import multer from "multer";
-import { authorizationController } from "../controllers/authorization-controller";
-import { logoutController } from "../controllers/logout-controller";
+import { authorizationController } from "../controllers/authorization-controller.js";
+import { logoutController } from "../controllers/logout-controller.js";
 
 const upload = multer();
 

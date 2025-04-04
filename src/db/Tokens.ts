@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from ".";
-import { Users } from "./Users";
+import { sequelize } from "./index.js";
+import { Users } from "./Users.js";
 
 export class Tokens extends Model {
     declare id: number;

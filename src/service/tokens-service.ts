@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Tokens } from "../db/Tokens";
+import { Tokens } from "../db/Tokens.js";
 
 type Data = { email: string; id: number; name: string };
 

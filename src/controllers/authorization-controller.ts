@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { AuthorizationMethods } from "../types/authorization-methods";
-import { handlerAuthorizationAction } from "../helpers/authorization/handler-authorization-action";
-import { getErrorMessage } from "../helpers/authorization/handler-uthorization-errors";
+import { AuthorizationMethods } from "../types/authorization-methods.js";
+import { handlerAuthorizationAction } from "../helpers/authorization/handler-authorization-action.js";
+import { getErrorMessage } from "../helpers/authorization/get-error-message.js";
 
 export const authorizationController = (action: AuthorizationMethods) => {
     return async (req: Request, res: Response) => {

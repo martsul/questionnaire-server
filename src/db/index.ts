@@ -1,7 +1,7 @@
 import { Sequelize } from "sequelize";
-import dotenv from "dotenv";
+import { config } from "dotenv";
 
-dotenv.config();
+config();
 
 const dbUrl = process.env.DB_URL;
 
@@ -14,7 +14,7 @@ export const sequelize = new Sequelize(dbUrl, {
     dialectOptions: {
         ssl: {
             require: true,
-        }
+        },
     },
-    logging: false
+    logging: false,
 });
