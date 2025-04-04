@@ -10,7 +10,7 @@ export const authorizationController = (action: AuthorizationMethods) => {
                 action,
                 userData: req.body,
             });
-            res.cookie("refreshToken", receivedData.tokens.refreshToken, {
+            res.cookie("refreshToken", receivedData.refreshToken, {
                 maxAge: 2592000000,
                 httpOnly: true,
             });

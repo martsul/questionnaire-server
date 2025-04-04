@@ -19,5 +19,5 @@ export const handlerAuthorizationAction = async ({
         ...receivedData,
     });
     await tokens.save();
-    return { tokens, name: receivedData.name };
+    return { ...tokens, name: receivedData.name, id: receivedData.id };
 };
