@@ -13,10 +13,7 @@ export const handlerAuthorizationAction = async ({
     userData,
 }: Values) => {
     const receivedData = await authorizationUser(action, userData);
-    const tokens = new TokensService({
-        email: userData.email,
-        ...receivedData,
-    });
+    const tokens = new TokensService(receivedData);
     await tokens.save();
-    return { ...tokens, name: receivedData.name, id: receivedData.id };
+    return { ...tokens, ...receivedData };
 };

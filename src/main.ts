@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { router } from "./router/index.js";
 import { testBDConnection } from "./helpers/test-bd-connection.js";
+import jwt from "jsonwebtoken";
 
 dotenv.config();
 
@@ -24,6 +25,8 @@ app.use(
 );
 app.use("/api", router);
 
+
+
 (async () => {
     try {
         await testBDConnection();
@@ -34,4 +37,3 @@ app.use("/api", router);
         console.error(error);
     }
 })();
-

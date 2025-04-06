@@ -37,7 +37,7 @@ export class AuthorizationService {
     async signin() {
         const result = await this.#findUser();
         await this.#validatePassword(result.password);
-        return { id: result.id, name: result.name };
+        return { id: result.id, name: result.name, isAdmin: Boolean(result.isAdmin), email: result.email };
     }
 
     async signup() {
@@ -47,6 +47,6 @@ export class AuthorizationService {
             password: this.#password,
             email: this.#email,
         });
-        return { id: result.id, name: result.name };
+        return { id: result.id, name: result.name, isAdmin: Boolean(result.isAdmin), email: result.email };
     }
 }

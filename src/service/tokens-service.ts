@@ -1,31 +1,37 @@
 import jwt from "jsonwebtoken";
 import { Tokens } from "../db/Tokens.js";
+import { config } from "dotenv";
+import { TokensServiceConstructor } from "../types/tokens-service-constructor.js";
 
-type Data = { email: string; id: number; name: string };
+config();
 
 export class TokensService {
-    declare accessesToken: string;
+    declare accessToken: string;
     declare refreshToken: string;
     #id: number;
 
-    constructor(data: Data) {
-        this.accessesToken = jwt.sign(
+    constructor(data: TokensServiceConstructor) {
+        this.#createTokens(data);
+        this.#id = data.id;
+    }
+
+    #createTokens(data: TokensServiceConstructor) {
+        this.accessToken = jwt.sign(
             data,
             process.env.JWT_ACCESS_SECRET as string,
             { expiresIn: "30m" }
         );
         this.refreshToken = jwt.sign(
             data,
-            process.env.JWT_ACCESS_SECRET as string,
+            process.env.JWT_REFRESH_SECRET as string,
             { expiresIn: "30d" }
         );
-        this.#id = data.id;
     }
 
     async save() {
         await Tokens.upsert({
             userId: this.#id,
-            accessToken: this.accessesToken,
+            accessToken: this.accessToken,
             refreshToken: this.refreshToken,
         });
     }
