@@ -19,7 +19,8 @@ export const authMiddleware = async (
         res.locals.tokensData = tokensData;
         next();
     } catch (error) {
-        console.log("error");
-        next();
+        if (error instanceof Error) {
+            res.status(401).send("Unauthorized");
+        }
     }
 };

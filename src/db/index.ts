@@ -16,5 +16,4 @@ export const sequelize = new Sequelize(dbUrl, {
             require: true,
         },
     },
-    logging: false,
 });
