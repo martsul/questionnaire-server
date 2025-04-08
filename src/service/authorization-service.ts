@@ -1,4 +1,4 @@
-import { Users } from "../db/Users.js";
+import { User } from "../db/User.js";
 import { AuthorizationBody } from "../types/authorization-body";
 import { hash, compare } from "bcrypt-ts";
 
@@ -14,7 +14,7 @@ export class AuthorizationService {
     }
 
     async #findUser() {
-        const result = await Users.findOne({ where: { email: this.#email } });
+        const result = await User.findOne({ where: { email: this.#email } });
         if (result === null) {
             throw new Error("Invalid email address");
         }
@@ -34,19 +34,36 @@ export class AuthorizationService {
         }
     }
 
+    #checkBlock(isBlocked: boolean) {
+        if (isBlocked) {
+            throw new Error("User is blocked");
+        }
+    }
+
     async signin() {
         const result = await this.#findUser();
         await this.#validatePassword(result.password);
-        return { id: result.id, name: result.name, isAdmin: Boolean(result.isAdmin), email: result.email };
+        this.#checkBlock(Boolean(result.isBlocked));
+        return {
+            id: result.id,
+            name: result.name,
+            isAdmin: Boolean(result.isAdmin),
+            email: result.email,
+        };
     }
 
     async signup() {
         await this.#hashingPassword();
-        const result = await Users.create({
+        const result = await User.create({
             name: this.#name,
             password: this.#password,
             email: this.#email,
         });
-        return { id: result.id, name: result.name, isAdmin: Boolean(result.isAdmin), email: result.email };
+        return {
+            id: result.id,
+            name: result.name,
+            isAdmin: Boolean(result.isAdmin),
+            email: result.email,
+        };
     }
 }

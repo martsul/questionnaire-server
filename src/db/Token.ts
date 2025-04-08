@@ -1,15 +1,16 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
-import { Users } from "./Users.js";
+import { User } from "./User.js";
 
-export class Tokens extends Model {
+export class Token extends Model {
     declare id: number;
     declare userId: number;
     declare accessToken: string;
     declare refreshToken: string;
+    declare User?: User 
 }
 
-Tokens.init(
+Token.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -21,10 +22,10 @@ Tokens.init(
             allowNull: false,
             unique: true,
             references: {
-                model: Users,
+                model: User,
                 key: "id",
             },
-            field: "user_id"
+            field: "user_id",
         },
         accessToken: {
             type: DataTypes.STRING(512),

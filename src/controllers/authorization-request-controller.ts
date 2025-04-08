@@ -1,30 +1,28 @@
 import { Request, Response } from "express";
-import { ValidatedTokens } from "../classes/validated-tokens.js";
-import { tokenDataGuard } from "../guards/token-data-guard.js";
-import { getTokensData } from "../helpers/get-tokens-data.js";
+import { User } from "../db/User.js";
+import { AuthorizationError } from "../errors/authorization-error";
 
-type AuthResponse = Response & {
-    locals: {
-        tokensData?: ValidatedTokens;
-    };
+const findUser = async (id: number) => {
+    const data = await User.findOne({
+        where: {
+            id: id,
+        },
+        attributes: ["isAdmin", "name", "id", "isBlocked"],
+    });
+    if (!data) throw new AuthorizationError();
+    return data;
 };
 
-export const authorizationRequestController = (
+export const authorizationRequestController = async (
     req: Request,
-    res: AuthResponse
+    res: Response
 ) => {
-try {
-        const tokensData = getTokensData(res)
-        res.cookie("refreshToken", tokensData.refreshToken, {
-            maxAge: 2592000000,
-            httpOnly: true,
-        });
-        res.json({
-            refreshToken: tokensData.refreshToken,
-            accessToken: tokensData.accessToken,
-            ...tokensData.userData,
-        });
-} catch (error) {
-    res.status(401).send()
-}
+    try {
+        const id = res.locals.id as number;
+        const user = await findUser(id);
+        if (user.isBlocked) throw new AuthorizationError();
+        res.send(user);
+    } catch (error) {
+        res.status(401).send();
+    }
 };

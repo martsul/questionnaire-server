@@ -1,16 +1,27 @@
-import { Op } from "sequelize";
-import { Users } from "../db/Users";
+import { Op, where } from "sequelize";
+import { User } from "../db/User.js";
 
 export class UsersService {
+    #id: number;
+
+    constructor(id: number) {
+        this.#id = id;
+    }
+
     async getUsers() {
-        return await Users.findAll({
+        const users = await User.findAll({
             attributes: ["id", "name", "isAdmin", "isBlocked"],
             order: ["id"],
         });
+        const status = await User.findOne({
+            attributes: ["isAdmin", "isBlocked"],
+            where: { id: this.#id },
+        });
+        return {users, status}
     }
 
     async block(ids: number[]) {
-        await Users.update(
+        await User.update(
             { isBlocked: true },
             {
                 where: {
@@ -24,7 +35,7 @@ export class UsersService {
     }
 
     async unblock(ids: number[]) {
-        await Users.update(
+        await User.update(
             { isBlocked: false },
             {
                 where: {
@@ -38,7 +49,7 @@ export class UsersService {
     }
 
     async giveAdmin(ids: number[]) {
-        await Users.update(
+        await User.update(
             { isAdmin: true },
             {
                 where: {
@@ -52,7 +63,7 @@ export class UsersService {
     }
 
     async takeAdmin(ids: number[]) {
-        await Users.update(
+        await User.update(
             { isAdmin: false },
             {
                 where: {

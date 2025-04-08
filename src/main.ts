@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import cors from "cors";
 import { router } from "./router/index.js";
 import { testBDConnection } from "./helpers/test-bd-connection.js";
+import { initAssociations } from "./db/associations.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api", router);
 (async () => {
     try {
         await testBDConnection();
+        initAssociations()
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });

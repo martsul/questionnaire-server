@@ -1,10 +1,17 @@
 import { NextFunction, Request, Response } from "express";
 import { ValidatedTokens } from "../classes/validated-tokens.js";
+import { config } from "dotenv";
+import { AuthorizationError } from "../errors/authorization-error.js";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-const getTokens = (req: Request) => {
-    const accessToken = req.headers.authorization?.split(" ")[1];
-    const refreshToken: string | undefined = req.cookies.refreshToken;
-    return { refreshToken, accessToken };
+config();
+
+const validateAccessToken = (token: string | undefined) => {
+    if (!token || !process.env.JWT_ACCESS_SECRET) {
+        throw new AuthorizationError();
+    }
+    const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET) as JwtPayload;
+    return decoded.id as number;
 };
 
 export const authMiddleware = async (
@@ -13,10 +20,9 @@ export const authMiddleware = async (
     next: NextFunction
 ) => {
     try {
-        const { accessToken, refreshToken } = getTokens(req);
-        const tokensData = new ValidatedTokens(accessToken, refreshToken);
-        await tokensData.startVerify();
-        res.locals.tokensData = tokensData;
+        const accessToken = req.headers.authorization?.split(" ")[1];
+        const id = validateAccessToken(accessToken);
+        res.locals.id = id
         next();
     } catch (error) {
         if (error instanceof Error) {

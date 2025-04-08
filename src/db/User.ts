@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
 
-export class Users extends Model {
+export class User extends Model {
     declare id: number;
     declare name: string;
     declare email: string;
@@ -10,7 +10,7 @@ export class Users extends Model {
     declare isAdmin: number;
 }
 
-Users.init(
+User.init(
     {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         name: {
@@ -29,8 +29,16 @@ Users.init(
             allowNull: false,
             validate: { len: [1, 60] },
         },
-        isBlocked: { type: DataTypes.BOOLEAN(), defaultValue: false,field:"is_blocked" },
-        isAdmin: { type: DataTypes.BOOLEAN(), defaultValue: false, field:"is_admin" },
+        isBlocked: {
+            type: DataTypes.BOOLEAN(),
+            defaultValue: false,
+            field: "is_blocked",
+        },
+        isAdmin: {
+            type: DataTypes.BOOLEAN(),
+            defaultValue: false,
+            field: "is_admin",
+        },
     },
     { sequelize, tableName: "users", timestamps: false }
 );

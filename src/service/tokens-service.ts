@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Tokens } from "../db/Tokens.js";
+import { Token } from "../db/Token.js";
 import { config } from "dotenv";
 import { TokensServiceConstructor } from "../types/tokens-service-constructor.js";
 
@@ -29,7 +29,7 @@ export class TokensService {
     }
 
     async save() {
-        await Tokens.upsert({
+        await Token.upsert({
             userId: this.#id,
             accessToken: this.accessToken,
             refreshToken: this.refreshToken,
