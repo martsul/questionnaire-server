@@ -17,7 +17,7 @@ export class UsersService {
             attributes: ["isAdmin", "isBlocked"],
             where: { id: this.#id },
         });
-        return {users, status}
+        return { users, status };
     }
 
     async block(ids: number[]) {

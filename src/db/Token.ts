@@ -7,7 +7,7 @@ export class Token extends Model {
     declare userId: number;
     declare accessToken: string;
     declare refreshToken: string;
-    declare User?: User 
+    declare User?: User;
 }
 
 Token.init(
@@ -39,7 +39,7 @@ Token.init(
         },
     },
     {
-        tableName: "tokens",
+        tableName: "token",
         timestamps: false,
         sequelize,
     }

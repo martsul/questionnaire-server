@@ -13,13 +13,13 @@ const checkUserStatus = async (res: Response) => {
         where: { id: id },
         attributes: ["isAdmin", "isBlocked"],
     });
-    return {userHasRights: user?.isAdmin && !user?.isBlocked, id};
+    return { userHasRights: user?.isAdmin && !user?.isBlocked, id };
 };
 
 export const usersController = (operation: ManagementUsersOperations) => {
     return async (req: Request<{}, {}, BodyRequest>, res: Response) => {
         try {
-            const {userHasRights, id} = await checkUserStatus(res);
+            const { userHasRights, id } = await checkUserStatus(res);
             if (!userHasRights) throw new AuthorizationError();
             const users = await new UsersService(id)[operation](req.body);
             res.json(users);

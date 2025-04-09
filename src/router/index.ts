@@ -6,6 +6,7 @@ import { authMiddleware } from "../middlewares/auth-middleware.js";
 import { authorizationRequestController } from "../controllers/authorization-request-controller.js";
 import { usersController } from "../controllers/users-controller.js";
 import { refreshController } from "../controllers/refresh-controller.js";
+import { fromController } from "../controllers/form-controller.js";
 
 export const router = Router();
 
@@ -19,3 +20,4 @@ router.post("/block", authMiddleware, usersController("block"))
 router.post("/unblock", authMiddleware, usersController("unblock"))
 router.post("/give_admin", authMiddleware, usersController("giveAdmin"))
 router.post("/take_admin", authMiddleware, usersController("takeAdmin"))
+router.post("/create_form", fromController("create"))

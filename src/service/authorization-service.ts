@@ -14,7 +14,9 @@ export class AuthorizationService {
     }
 
     async #findUser() {
-        const result = await User.findOne({ where: { email: this.#email } });
+        const result = await User.findOne({
+            where: { email: this.#email },
+        });
         if (result === null) {
             throw new Error("Invalid email address");
         }

@@ -40,5 +40,5 @@ User.init(
             field: "is_admin",
         },
     },
-    { sequelize, tableName: "users", timestamps: false }
+    { sequelize, tableName: "user", timestamps: false }
 );
