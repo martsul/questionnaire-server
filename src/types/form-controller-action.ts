@@ -1,1 +1,1 @@
-export type FormControllerAction = "create" | "get";
+export type FormControllerAction = "create" | "get" | "update";

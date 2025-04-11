@@ -1,4 +1,4 @@
-import { DataTypes, Model } from "sequelize";
+import { DataTypes, Model, Sequelize } from "sequelize";
 import { User } from "./User";
 import { Theme } from "./Theme";
 import { sequelize } from "./index.js";
@@ -12,6 +12,7 @@ export class Form extends Model {
     declare isPublic: boolean;
     declare themeId: number;
     declare likes: number;
+    declare Theme: Theme;
 }
 
 Form.init(
@@ -56,10 +57,16 @@ Form.init(
             type: DataTypes.INTEGER,
             defaultValue: 0,
         },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: Sequelize.fn("NOW"),
+            field: "created_at",
+        },
     },
     {
+        updatedAt: false,
         tableName: "form",
-        timestamps: false,
         sequelize,
     }
 );

@@ -7,6 +7,7 @@ import { authorizationRequestController } from "../controllers/authorization-req
 import { usersController } from "../controllers/users-controller.js";
 import { refreshController } from "../controllers/refresh-controller.js";
 import { fromController } from "../controllers/form-controller.js";
+import { tagController } from "../controllers/tag-controller.js";
 
 export const router = Router();
 
@@ -20,4 +21,7 @@ router.post("/block", authMiddleware, usersController("block"))
 router.post("/unblock", authMiddleware, usersController("unblock"))
 router.post("/give_admin", authMiddleware, usersController("giveAdmin"))
 router.post("/take_admin", authMiddleware, usersController("takeAdmin"))
-router.post("/create_form", fromController("create"))
+router.post("/form", fromController("create"))
+router.get("/form", fromController("get"))
+router.put("/form", fromController("update"))
+router.get("/tag", tagController)
