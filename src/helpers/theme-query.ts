@@ -1,6 +1,6 @@
 import { QueryTypes } from "sequelize";
-import { sequelize } from "../db";
-import { ResponseTheme } from "../types/response-theme";
+import { sequelize } from "../db/index.js";
+import { ResponseTheme } from "../types/response-theme.js";
 
 export const themeQuery = async (theme: string) => {
     return await sequelize.query(

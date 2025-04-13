@@ -7,7 +7,7 @@ export class User extends Model {
     declare email: string;
     declare password: string;
     declare isBlocked: number;
-    declare isAdmin: number;
+    declare isAdmin: boolean;
 }
 
 User.init(

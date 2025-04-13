@@ -1,8 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { ValidatedTokens } from "../classes/validated-tokens.js";
 import { config } from "dotenv";
-import { AuthorizationError } from "../errors/authorization-error.js";
 import jwt, { JwtPayload } from "jsonwebtoken";
+import { AuthorizationError } from "../errors/authorization-error.js";
 
 config();
 

@@ -1,6 +1,6 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { User } from "./User";
-import { Theme } from "./Theme";
+import { User } from "./User.js";
+import { Theme } from "./Theme.js";
 import { sequelize } from "./index.js";
 
 export class Form extends Model {

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { User } from "../db/User.js";
-import { AuthorizationError } from "../errors/authorization-error";
+import { AuthorizationError } from "../errors/authorization-error.js";
 
 const findUser = async (id: number) => {
     const data = await User.findOne({

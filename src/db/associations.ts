@@ -1,11 +1,11 @@
-import { syncDatabase } from ".";
-import { Form } from "./Form";
-import { FormTag } from "./Form-Tag";
-import { FormUser } from "./Form-User";
-import { Tag } from "./Tag";
-import { Theme } from "./Theme";
-import { Token } from "./Token";
-import { User } from "./User";
+import { syncDatabase } from "./index.js";
+import { Form } from "./Form.js";
+import { FormTag } from "./Form-Tag.js";
+import { FormUser } from "./Form-User.js";
+import { Tag } from "./Tag.js";
+import { Theme } from "./Theme.js";
+import { Token } from "./Token.js";
+import { User } from "./User.js";
 
 User.hasOne(Token, {
     foreignKey: "userId",

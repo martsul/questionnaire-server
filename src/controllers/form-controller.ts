@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { FormControllerAction } from "../types/form-controller-action";
-import { FormService } from "../service/form-service";
+import { FormControllerAction } from "../types/form-controller-action.js";
+import { FormService } from "../service/form-service.js";
 
 export const fromController = (action: FormControllerAction) => {
     return async (req: Request, res: Response) => {

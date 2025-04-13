@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { themeQuery } from "../helpers/theme-query";
+import { themeQuery } from "../helpers/theme-query.js";
 
 export const themeController = async (req: Request, res: Response) => {
     try {

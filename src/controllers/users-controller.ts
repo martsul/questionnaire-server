@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import { ManagementUsersOperations } from "../types/management-users-operations";
-import { AuthorizationError } from "../errors/authorization-error";
-import { handlerError } from "../helpers/handler-error";
-import { UsersService } from "../service/users-service";
-import { User } from "../db/User";
+import { ManagementUsersOperations } from "../types/management-users-operations.js";
+import { AuthorizationError } from "../errors/authorization-error.js";
+import { handlerError } from "../helpers/handler-error.js";
+import { UsersService } from "../service/users-service.js";
+import { User } from "../db/User.js";
 
 type BodyRequest = number[];
 

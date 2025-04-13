@@ -1,4 +1,4 @@
-import { Op, where } from "sequelize";
+import { Op } from "sequelize";
 import { User } from "../db/User.js";
 
 export class UsersService {

@@ -1,6 +1,6 @@
 import { QueryTypes } from "sequelize";
-import { sequelize } from "../db";
-import { ResponseUser } from "../types/response-user";
+import { sequelize } from "../db/index.js";
+import { ResponseUser } from "../types/response-user.js";
 
 export const userQuery = async (query: string, filter: "email" | "name") => {
     const vector = `${filter}_vector`;

@@ -6,7 +6,6 @@ import { router } from "./router/index.js";
 import { testBDConnection } from "./helpers/test-bd-connection.js";
 import { initAssociations } from "./db/associations.js";
 import { v2 as cloudinary } from "cloudinary";
-import { Tag } from "./db/Tag.js";
 
 dotenv.config();
 

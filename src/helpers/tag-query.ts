@@ -1,6 +1,6 @@
 import { QueryTypes } from "sequelize";
-import { sequelize } from "../db";
-import { ResponseTags } from "../types/response-tags";
+import { sequelize } from "../db/index.js";
+import { ResponseTags } from "../types/response-tags.js";
 
 export const tagQuery = async (tag: string) => {
     return await sequelize.query(

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { UserRequestQuery } from "../types/user-request-query";
-import { userQuery } from "../helpers/user-query";
+import { UserRequestQuery } from "../types/user-request-query.js";
+import { userQuery } from "../helpers/user-query.js";
 
 export const userController = async (
     req: Request<any, any, any, UserRequestQuery>,

@@ -1,5 +1,5 @@
 import { User } from "../db/User.js";
-import { AuthorizationBody } from "../types/authorization-body";
+import { AuthorizationBody } from "../types/authorization-body.js";
 import { hash, compare } from "bcrypt-ts";
 
 export class AuthorizationService {

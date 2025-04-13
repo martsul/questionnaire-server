@@ -1,16 +1,16 @@
-import { Form } from "../db/Form";
-import { Theme } from "../db/Theme";
-import { User } from "../db/User";
-import { v2 as cloudinary, UploadApiResponse } from "cloudinary";
-import { ClientImg } from "../types/client-img";
-import { UpdateFormData } from "../types/update-form-data";
-import { StaticThemes } from "../types/static-themes";
-import { UpdateTags } from "../types/update-tags";
-import { Tag } from "../db/Tag";
+import { Form } from "../db/Form.js";
+import { Theme } from "../db/Theme.js";
+import { User } from "../db/User.js";
+import { v2 as cloudinary } from "cloudinary";
+import { ClientImg } from "../types/client-img.js";
+import { UpdateFormData } from "../types/update-form-data.js";
+import { StaticThemes } from "../types/static-themes.js";
+import { UpdateTags } from "../types/update-tags.js";
+import { Tag } from "../db/Tag.js";
 import { Op } from "sequelize";
-import { FormTag } from "../db/Form-Tag";
-import { UpdateUsers } from "../types/update-users";
-import { FormUser } from "../db/Form-User";
+import { FormTag } from "../db/Form-Tag.js";
+import { UpdateUsers } from "../types/update-users.js";
+import { FormUser } from "../db/Form-User.js";
 
 type Data = { id: number };
 
@@ -71,7 +71,7 @@ export class FormService {
                 Theme,
                 owner,
             },
-            tags: result.tags.map(t => t.tag),
+            tags: result.tags.map((t) => t.tag),
             users: result.users,
         };
     }

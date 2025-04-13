@@ -1,4 +1,3 @@
-import { timeStamp } from "console";
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
 import { Form } from "./Form.js";

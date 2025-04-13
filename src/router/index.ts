@@ -8,7 +8,7 @@ import { refreshController } from "../controllers/refresh-controller.js";
 import { fromController } from "../controllers/form-controller.js";
 import { tagController } from "../controllers/tag-controller.js";
 import { themeController } from "../controllers/theme-controller.js";
-import { userController } from "../controllers/user-controllet.js";
+import { userController } from "../controllers/user-controller.js";
 
 export const router = Router();
 
