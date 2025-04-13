@@ -18,17 +18,15 @@ Tag.init(
             allowNull: false,
             unique: true,
         },
+        tagVector: {
+            type: DataTypes.TSVECTOR,
+            allowNull: true,
+            field: "tag_vector",
+        },
     },
     {
         timestamps: false,
         sequelize,
         tableName: "tags",
-        indexes: [
-            {
-                fields: ["tag"],
-                using: "GIN",
-                operator: "gin_trgm_ops",
-            },
-        ],
     }
 );

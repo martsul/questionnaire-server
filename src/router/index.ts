@@ -1,5 +1,4 @@
 import { Router } from "express";
-import multer from "multer";
 import { authorizationController } from "../controllers/authorization-controller.js";
 import { logoutController } from "../controllers/logout-controller.js";
 import { authMiddleware } from "../middlewares/auth-middleware.js";
@@ -8,6 +7,8 @@ import { usersController } from "../controllers/users-controller.js";
 import { refreshController } from "../controllers/refresh-controller.js";
 import { fromController } from "../controllers/form-controller.js";
 import { tagController } from "../controllers/tag-controller.js";
+import { themeController } from "../controllers/theme-controller.js";
+import { userController } from "../controllers/user-controllet.js";
 
 export const router = Router();
 
@@ -25,3 +26,5 @@ router.post("/form", fromController("create"))
 router.get("/form", fromController("get"))
 router.put("/form", fromController("update"))
 router.get("/tag", tagController)
+router.get("/theme", themeController)
+router.get("/user", userController)

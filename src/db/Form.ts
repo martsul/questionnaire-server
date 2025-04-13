@@ -13,6 +13,10 @@ export class Form extends Model {
     declare themeId: number;
     declare likes: number;
     declare Theme: Theme;
+    declare createdAt: Date;
+    declare owner: { name: string };
+    declare tags: { tag: string }[];
+    declare users: { name: string; id: number; email: string }[];
 }
 
 Form.init(

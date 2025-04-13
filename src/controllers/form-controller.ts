@@ -8,7 +8,7 @@ export const fromController = (action: FormControllerAction) => {
             const data = req.body || req.query;
             const formService = new FormService();
             const result = await formService[action](data);
-            res.json({ head: result });
+            res.json(result);
         } catch (error) {
             res.status(500).send();
             console.log(error);

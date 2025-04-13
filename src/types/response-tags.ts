@@ -1,4 +1,4 @@
 export type ResponseTags = {
     tag: string;
-    sim: number;
+    rank: number;
 };

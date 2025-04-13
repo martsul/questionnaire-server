@@ -1,26 +1,15 @@
 import { Request, Response } from "express";
-import { sequelize } from "../db/index.js";
-import { QueryTypes } from "sequelize";
 import { ResponseTags } from "../types/response-tags.js";
+import { tagQuery } from "../helpers/tag-query.js";
 
 export const tagController = async (req: Request, res: Response) => {
     try {
         const { tag } = req.query;
-        const result: ResponseTags[] = await sequelize.query(
-            `
-        SELECT tag, similarity(tag, :searchTerm) AS sim
-        FROM tags
-        WHERE tag % :searchTerm
-        ORDER BY sim DESC
-        `,
-            {
-                replacements: { searchTerm: tag },
-                type: QueryTypes.SELECT,
-            }
-        );
+        const result: ResponseTags[] = await tagQuery(tag as string);
         const convertResult = result.map((e) => e.tag);
         res.send(convertResult);
     } catch (error) {
+        res.status(500).send()
         console.log(error);
     }
 };

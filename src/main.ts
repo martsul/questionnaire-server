@@ -38,6 +38,7 @@ app.use("/api", router);
         await testBDConnection();
         initAssociations();
 
+
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
