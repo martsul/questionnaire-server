@@ -1,1 +1,0 @@
-export type StaticThemes = "education" | "quiz" | "other";

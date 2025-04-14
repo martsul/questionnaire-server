@@ -4,13 +4,11 @@ import { User } from "../db/User.js";
 import { v2 as cloudinary } from "cloudinary";
 import { ClientImg } from "../types/client-img.js";
 import { UpdateFormData } from "../types/update-form-data.js";
-import { StaticThemes } from "../types/static-themes.js";
-import { UpdateTags } from "../types/update-tags.js";
 import { Tag } from "../db/Tag.js";
 import { Op } from "sequelize";
 import { FormTag } from "../db/Form-Tag.js";
-import { UpdateUsers } from "../types/update-users.js";
 import { FormUser } from "../db/Form-User.js";
+import { UsersCollection } from "../types/users-collection.js";
 
 type Data = { id: number };
 
@@ -20,56 +18,54 @@ export class FormService {
     }
 
     async get(data: Data) {
-        return this.#convertGet(
-            await Form.findByPk(data.id, {
-                attributes: { exclude: ["themeId"] },
-                include: [
-                    { model: Theme, attributes: ["theme"] },
-                    { model: User, as: "owner", attributes: ["name"] },
-                    {
-                        model: Tag,
-                        as: "tags",
-                        attributes: ["tag"],
-                        through: { attributes: [] },
-                    },
-                    {
-                        model: User,
-                        as: "users",
-                        attributes: ["name", "id", "email"],
-                        through: { attributes: [] },
-                    },
-                ],
-            })
+        const form = await this.#findForm(data.id);
+        const themes = await this.#getThemes();
+        return this.#convertGet(form, themes);
+    }
+
+    async #getThemes() {
+        return (await Theme.findAll({ attributes: ["theme"] })).map(
+            (t) => t.theme
         );
     }
 
-    #convertGet(result: Form | null) {
-        if (!result) return result;
-        const {
-            id,
-            ownerId,
-            title,
-            description,
-            img,
-            isPublic,
-            likes,
-            createdAt,
-            Theme,
-            owner,
-        } = result;
+    async #findForm(id: number) {
+        return await Form.findByPk(id, {
+            attributes: { exclude: ["themeId"] },
+            include: [
+                { model: Theme, attributes: ["theme"] },
+                { model: User, as: "owner", attributes: ["name"] },
+                {
+                    model: Tag,
+                    as: "tags",
+                    attributes: ["tag"],
+                    through: { attributes: [] },
+                },
+                {
+                    model: User,
+                    as: "users",
+                    attributes: ["name", "id", "email"],
+                    through: { attributes: [] },
+                },
+            ],
+        });
+    }
 
+    #convertGet(result: Form | null, themes: string[]) {
+        if (!result) return result;
         return {
             head: {
-                id,
-                ownerId,
-                title,
-                description,
-                img,
-                isPublic,
-                likes,
-                createdAt,
-                Theme,
-                owner,
+                id: result.id,
+                ownerId: result.ownerId,
+                title: result.title,
+                description: result.description,
+                img: result.img,
+                isPublic: result.isPublic,
+                likes: result.likes,
+                createdAt: result.createdAt,
+                theme: result.Theme.theme,
+                owner: result.owner,
+                themes,
             },
             tags: result.tags.map((t) => t.tag),
             users: result.users,
@@ -113,20 +109,22 @@ export class FormService {
         return newSrc;
     }
 
-    async #findOrCreateTheme(ownTheme: string = "") {
-        return await Theme.findOrCreate({
-            where: { theme: ownTheme.toLowerCase() },
+    async #getThemeId(theme: string) {
+        const result = await Theme.findOne({
+            where: { theme: theme },
             attributes: ["id"],
         });
+        if (result) {
+            return result.id;
+        }
+        throw new Error("Incorrect Theme");
     }
 
-    async #getThemeId(theme: StaticThemes, ownTheme?: string) {
-        const currentTheme = theme === "other" ? ownTheme : theme;
-        const [result] = await this.#findOrCreateTheme(currentTheme);
-        return result.id;
-    }
-
-    async #updateForm(data: UpdateFormData, themeId: number, imgSrc: string) {
+    async #formUpdateQuery(
+        data: UpdateFormData,
+        themeId: number,
+        imgSrc: string
+    ) {
         await Form.update(
             {
                 title: data.title,
@@ -139,6 +137,12 @@ export class FormService {
         );
     }
 
+    async #updateForm(data: UpdateFormData) {
+        const themeId = await this.#getThemeId(data.theme);
+        const imgSrc = await this.#getImgSrc(data.img, data.formId);
+        await this.#formUpdateQuery(data, themeId, imgSrc);
+    }
+
     async #findTags(tags: string[]) {
         return await Tag.findAll({ where: { tag: { [Op.in]: tags } } });
     }
@@ -148,60 +152,59 @@ export class FormService {
         await Tag.bulkCreate(formatTags, { ignoreDuplicates: true });
     }
 
-    async #addTags(tags: string[], formId: number) {
-        const tagsId = await this.#findTags(tags);
+    async #addTags(tagsId: Tag[], formId: number) {
         const covetedTags = tagsId.map((t) => ({ tagId: t.id, formId }));
         await FormTag.bulkCreate(covetedTags, { ignoreDuplicates: true });
     }
 
-    async #deleteTags(tags: string[], formId: number) {
-        const findTags = await this.#findTags(tags);
-        const tagsIds = findTags.map((t) => t.id);
+    async #deleteTags(tagsId: Tag[], formId: number) {
+        const convertedTagsId = tagsId.map((t) => t.id);
         await FormTag.destroy({
             where: {
                 formId,
                 tagId: {
-                    [Op.in]: tagsIds,
+                    [Op.notIn]: convertedTagsId,
                 },
             },
         });
     }
 
-    async #updateTags(tags: UpdateTags, formId: number) {
-        const { addTags, deleteTags } = tags;
-        await this.#createTags(addTags);
-        await this.#addTags(addTags, formId);
-        await this.#deleteTags(deleteTags, formId);
+    async #updateTagsDb(tags: string[], formId: number) {
+        const tagsId = await this.#findTags(tags);
+        await this.#addTags(tagsId, formId);
+        await this.#deleteTags(tagsId, formId);
     }
 
-    async #addUsers(users: string[], formId: number) {
-        const covertUsers = users.map((u) => ({ userId: +u, formId }));
+    async #updateTags(tags: string[], formId: number) {
+        await this.#createTags(tags);
+        await this.#updateTagsDb(tags, formId);
+    }
+
+    async #addUsers(users: User["id"][], formId: number) {
+        const covertUsers = users.map((u) => ({ userId: u, formId }));
         await FormUser.bulkCreate(covertUsers, { ignoreDuplicates: true });
     }
 
-    async #deleteUsers(users: string[], formId: number) {
-        const covertUsers = users.map(Number);
+    async #deleteUsers(users: User["id"][], formId: number) {
         await FormUser.destroy({
             where: {
                 formId: formId,
                 userId: {
-                    [Op.in]: covertUsers,
+                    [Op.notIn]: users,
                 },
             },
         });
     }
 
-    async #updateUsers(users: UpdateUsers, formId: number) {
-        const { addUsers, deleteUsers } = users;
-        await this.#addUsers(Object.keys(addUsers), formId);
-        await this.#deleteUsers(Object.keys(deleteUsers), formId);
+    async #updateUsers(users: UsersCollection, formId: number) {
+        await this.#addUsers(Object.keys(users).map(Number), formId);
+        await this.#deleteUsers(Object.keys(users).map(Number), formId);
     }
 
     async update(data: UpdateFormData) {
-        const themeId = await this.#getThemeId(data.theme, data.ownTheme);
-        const imgSrc = await this.#getImgSrc(data.img, data.formId);
+        console.log(data)
         await this.#updateTags(data.tags, data.formId);
         await this.#updateUsers(data.users, data.formId);
-        await this.#updateForm(data, themeId, imgSrc);
+        await this.#updateForm(data);
     }
 }

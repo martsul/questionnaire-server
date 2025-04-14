@@ -6,6 +6,7 @@ import { Tag } from "./Tag.js";
 import { Theme } from "./Theme.js";
 import { Token } from "./Token.js";
 import { User } from "./User.js";
+import { Questions } from "./Questions.js";
 
 User.hasOne(Token, {
     foreignKey: "userId",
@@ -17,14 +18,16 @@ User.hasMany(Form, {
     sourceKey: "id",
 });
 
+User.belongsToMany(Form, {
+    through: FormUser,
+    foreignKey: "userId",
+    otherKey: "formId",
+    as: "forms",
+});
+
 Token.belongsTo(User, {
     foreignKey: "userId",
     targetKey: "id",
-});
-
-Theme.hasMany(Form, {
-    foreignKey: "themeId",
-    sourceKey: "id",
 });
 
 Form.belongsTo(Theme, {
@@ -38,17 +41,16 @@ Form.belongsTo(User, {
     as: "owner",
 });
 
+Form.hasMany(Questions, {
+    foreignKey: "formId",
+    sourceKey: "id",
+});
+
 Form.belongsToMany(Tag, {
     through: FormTag,
     foreignKey: "formId",
     otherKey: "tagId",
     as: "tags",
-});
-
-Tag.belongsToMany(Form, {
-    through: FormTag,
-    foreignKey: "tagId",
-    otherKey: "formId",
 });
 
 Form.belongsToMany(User, {
@@ -58,11 +60,20 @@ Form.belongsToMany(User, {
     as: "users",
 });
 
-User.belongsToMany(Form, {
-    through: FormUser,
-    foreignKey: "userId",
+Tag.belongsToMany(Form, {
+    through: FormTag,
+    foreignKey: "tagId",
     otherKey: "formId",
-    as: "forms",
+});
+
+Theme.hasMany(Form, {
+    foreignKey: "themeId",
+    sourceKey: "id",
+});
+
+Questions.belongsTo(Form, {
+    foreignKey: "formId",
+    targetKey: "id"
 });
 
 syncDatabase();
