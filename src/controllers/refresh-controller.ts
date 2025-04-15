@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
-import { User } from "../db/User.js";
+import { Users } from "../db/Users.js";
 import { AuthorizationError } from "../errors/authorization-error.js";
 import { TokensService } from "../service/tokens-service.js";
 
@@ -16,7 +16,7 @@ const getId = (refreshToken: string) => {
 };
 
 const findUser = async (id: number) => {
-    const user = await User.findOne({
+    const user = await Users.findOne({
         where: { id },
         raw: true,
         attributes: ["name", "email", "id", "isAdmin"],

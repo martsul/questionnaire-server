@@ -1,4 +1,1 @@
-export type ClientImg = {
-    img: string | null;
-    type: string | null;
-};
+export type ClientImg = { img: string | null; type: string | null } | string;

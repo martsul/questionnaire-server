@@ -3,13 +3,13 @@ import { ManagementUsersOperations } from "../types/management-users-operations.
 import { AuthorizationError } from "../errors/authorization-error.js";
 import { handlerError } from "../helpers/handler-error.js";
 import { UsersService } from "../service/users-service.js";
-import { User } from "../db/User.js";
+import { Users } from "../db/Users.js";
 
 type BodyRequest = number[];
 
 const checkUserStatus = async (res: Response) => {
     const id = res.locals.id as number;
-    const user = await User.findOne({
+    const user = await Users.findOne({
         where: { id: id },
         attributes: ["isAdmin", "isBlocked"],
     });

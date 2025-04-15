@@ -7,6 +7,7 @@ import { testBDConnection } from "./helpers/test-bd-connection.js";
 import { initAssociations } from "./db/associations.js";
 import { v2 as cloudinary } from "cloudinary";
 
+
 dotenv.config();
 
 const PORT = process.env.PORT || 10000;
@@ -36,8 +37,6 @@ app.use("/api", router);
 
         await testBDConnection();
         initAssociations();
-
-
         app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });

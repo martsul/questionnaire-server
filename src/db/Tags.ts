@@ -1,30 +1,32 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
 
-export class Theme extends Model {
+export class Tags extends Model {
     declare id: number;
-    declare theme: string;
+    declare tag: string;
 }
 
-Theme.init(
+Tags.init(
     {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
         },
-        theme: {
-            type: DataTypes.STRING(20),
+        tag: {
+            type: DataTypes.STRING(25),
             allowNull: false,
             unique: true,
         },
-        themeVector: {
+        tagVector: {
             type: DataTypes.TSVECTOR,
             allowNull: true,
-            field: "theme_vector",
+            field: "tag_vector",
         },
     },
-    { tableName: "theme", timestamps: false, sequelize }
+    {
+        timestamps: false,
+        sequelize,
+        tableName: "tags",
+    }
 );
-
-

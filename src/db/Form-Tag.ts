@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
-import { Form } from "./Form.js";
-import { Tag } from "./Tag.js";
+import { Forms } from "./Forms.js";
+import { Tags } from "./Tags.js";
 
 export class FormTag extends Model {
     declare formId: number;
@@ -14,7 +14,7 @@ FormTag.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: Form,
+                model: Forms,
                 key: "id",
             },
             onDelete: "CASCADE",
@@ -24,7 +24,7 @@ FormTag.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: Tag,
+                model: Tags,
                 key: "id",
             },
             onDelete: "CASCADE",
@@ -35,15 +35,13 @@ FormTag.init(
         sequelize,
         tableName: "form_tag",
         timestamps: false,
-        freezeTableName: true,
         indexes: [
             {
                 unique: true,
-                fields: ["form_id", "tag_id"]
-            }
+                fields: ["form_id", "tag_id"],
+            },
         ],
     }
 );
 
-
-FormTag.removeAttribute("id")
+FormTag.removeAttribute("id");

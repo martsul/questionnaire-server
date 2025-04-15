@@ -1,3 +1,3 @@
-import { User } from "../db/User.js";
+import { Users } from "../db/Users.js";
 
-export type UsersCollection = Record<User["id"], User>
+export type UsersCollection = Record<Users["id"], Users>;

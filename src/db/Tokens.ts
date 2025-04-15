@@ -1,16 +1,16 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
-import { User } from "./User.js";
+import { Users } from "./Users.js";
 
-export class Token extends Model {
+export class Tokens extends Model {
     declare id: number;
     declare userId: number;
     declare accessToken: string;
     declare refreshToken: string;
-    declare User?: User;
+    declare Users?: Users;
 }
 
-Token.init(
+Tokens.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -22,9 +22,10 @@ Token.init(
             allowNull: false,
             unique: true,
             references: {
-                model: User,
+                model: Users,
                 key: "id",
             },
+            onDelete: "CASCADE",
             field: "user_id",
         },
         accessToken: {
@@ -39,7 +40,7 @@ Token.init(
         },
     },
     {
-        tableName: "token",
+        tableName: "tokens",
         timestamps: false,
         sequelize,
     }

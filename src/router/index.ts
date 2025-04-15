@@ -9,6 +9,7 @@ import { fromController } from "../controllers/form-controller.js";
 import { tagController } from "../controllers/tag-controller.js";
 import { themeController } from "../controllers/theme-controller.js";
 import { userController } from "../controllers/user-controller.js";
+import { likeController } from "../controllers/likes-controller.js";
 
 export const router = Router();
 
@@ -28,3 +29,4 @@ router.put("/form", fromController("update"))
 router.get("/tag", tagController)
 router.get("/theme", themeController)
 router.get("/user", userController)
+router.post("/like", likeController)

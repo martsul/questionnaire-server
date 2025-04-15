@@ -1,79 +1,101 @@
 import { syncDatabase } from "./index.js";
-import { Form } from "./Form.js";
+import { Forms } from "./Forms.js";
 import { FormTag } from "./Form-Tag.js";
 import { FormUser } from "./Form-User.js";
-import { Tag } from "./Tag.js";
-import { Theme } from "./Theme.js";
-import { Token } from "./Token.js";
-import { User } from "./User.js";
+import { Tags } from "./Tags.js";
+import { Themes } from "./Themes.js";
+import { Tokens } from "./Tokens.js";
+import { Users } from "./Users.js";
 import { Questions } from "./Questions.js";
+import { Likes } from "./Likes.js";
 
-User.hasOne(Token, {
+Users.hasOne(Tokens, {
     foreignKey: "userId",
     sourceKey: "id",
 });
 
-User.hasMany(Form, {
+Users.hasMany(Forms, {
     foreignKey: "ownerId",
     sourceKey: "id",
 });
 
-User.belongsToMany(Form, {
+Users.belongsToMany(Forms, {
     through: FormUser,
     foreignKey: "userId",
     otherKey: "formId",
     as: "forms",
 });
 
-Token.belongsTo(User, {
+Users.hasMany(Likes, {
+    foreignKey: "userId",
+    sourceKey: "id",
+});
+
+Tokens.belongsTo(Users, {
     foreignKey: "userId",
     targetKey: "id",
 });
 
-Form.belongsTo(Theme, {
+Forms.hasMany(Likes, {
+    foreignKey: "formId",
+    sourceKey: "id",
+});
+
+Forms.belongsTo(Themes, {
     foreignKey: "themeId",
     targetKey: "id",
 });
 
-Form.belongsTo(User, {
+Forms.belongsTo(Users, {
     foreignKey: "ownerId",
     targetKey: "id",
     as: "owner",
 });
 
-Form.hasMany(Questions, {
+Forms.hasMany(Questions, {
     foreignKey: "formId",
     sourceKey: "id",
 });
 
-Form.belongsToMany(Tag, {
+Forms.belongsToMany(Tags, {
     through: FormTag,
     foreignKey: "formId",
     otherKey: "tagId",
     as: "tags",
 });
 
-Form.belongsToMany(User, {
+Forms.belongsToMany(Users, {
     through: FormUser,
     foreignKey: "formId",
     otherKey: "userId",
     as: "users",
 });
 
-Tag.belongsToMany(Form, {
+
+Tags.belongsToMany(Forms, {
     through: FormTag,
     foreignKey: "tagId",
     otherKey: "formId",
 });
 
-Theme.hasMany(Form, {
+Themes.hasMany(Forms, {
     foreignKey: "themeId",
     sourceKey: "id",
 });
 
-Questions.belongsTo(Form, {
+Questions.belongsTo(Forms, {
     foreignKey: "formId",
-    targetKey: "id"
+    targetKey: "id",
+});
+
+Likes.belongsTo(Users, {
+    foreignKey: "userId",
+    targetKey: "id",
+});
+
+Likes.belongsTo(Forms, {
+    foreignKey: "formId",
+    targetKey: "id",
 });
 
 syncDatabase();

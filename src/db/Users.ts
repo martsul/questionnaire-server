@@ -1,7 +1,7 @@
 import { DataTypes, Model } from "sequelize";
 import { sequelize } from "./index.js";
 
-export class User extends Model {
+export class Users extends Model {
     declare id: number;
     declare name: string;
     declare email: string;
@@ -10,7 +10,7 @@ export class User extends Model {
     declare isAdmin: boolean;
 }
 
-User.init(
+Users.init(
     {
         id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
         name: {
@@ -50,5 +50,5 @@ User.init(
             field: "email_vector",
         },
     },
-    { sequelize, tableName: "user", timestamps: false }
+    { sequelize, tableName: "users", timestamps: false }
 );

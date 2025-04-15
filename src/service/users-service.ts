@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { User } from "../db/User.js";
+import { Users } from "../db/Users.js";
 
 export class UsersService {
     #id: number;
@@ -9,11 +9,11 @@ export class UsersService {
     }
 
     async getUsers() {
-        const users = await User.findAll({
+        const users = await Users.findAll({
             attributes: ["id", "name", "isAdmin", "isBlocked"],
             order: ["id"],
         });
-        const status = await User.findOne({
+        const status = await Users.findOne({
             attributes: ["isAdmin", "isBlocked"],
             where: { id: this.#id },
         });
@@ -21,7 +21,7 @@ export class UsersService {
     }
 
     async block(ids: number[]) {
-        await User.update(
+        await Users.update(
             { isBlocked: true },
             {
                 where: {
@@ -35,7 +35,7 @@ export class UsersService {
     }
 
     async unblock(ids: number[]) {
-        await User.update(
+        await Users.update(
             { isBlocked: false },
             {
                 where: {
@@ -49,7 +49,7 @@ export class UsersService {
     }
 
     async giveAdmin(ids: number[]) {
-        await User.update(
+        await Users.update(
             { isAdmin: true },
             {
                 where: {
@@ -63,7 +63,7 @@ export class UsersService {
     }
 
     async takeAdmin(ids: number[]) {
-        await User.update(
+        await Users.update(
             { isAdmin: false },
             {
                 where: {

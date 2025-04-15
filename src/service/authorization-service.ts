@@ -1,4 +1,4 @@
-import { User } from "../db/User.js";
+import { Users } from "../db/Users.js";
 import { AuthorizationBody } from "../types/authorization-body.js";
 import { hash, compare } from "bcrypt-ts";
 
@@ -14,7 +14,7 @@ export class AuthorizationService {
     }
 
     async #findUser() {
-        const result = await User.findOne({
+        const result = await Users.findOne({
             where: { email: this.#email },
         });
         if (result === null) {
@@ -56,7 +56,7 @@ export class AuthorizationService {
 
     async signup() {
         await this.#hashingPassword();
-        const result = await User.create({
+        const result = await Users.create({
             name: this.#name,
             password: this.#password,
             email: this.#email,

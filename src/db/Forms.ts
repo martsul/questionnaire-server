@@ -1,9 +1,11 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
-import { User } from "./User.js";
-import { Theme } from "./Theme.js";
+import { Users } from "./Users.js";
+import { Themes } from "./Themes.js";
 import { sequelize } from "./index.js";
+import { Questions } from "./Questions.js";
+import { Likes } from "./Likes.js";
 
-export class Form extends Model {
+export class Forms extends Model {
     declare id: number;
     declare ownerId: number;
     declare title: string;
@@ -11,15 +13,14 @@ export class Form extends Model {
     declare img: string;
     declare isPublic: boolean;
     declare themeId: number;
-    declare likes: number;
-    declare Theme: Theme;
-    declare createdAt: Date;
+    declare Theme: Themes;
     declare owner: { name: string };
     declare tags: { tag: string }[];
     declare users: { name: string; id: number; email: string }[];
+    declare Questions: Questions;
 }
 
-Form.init(
+Forms.init(
     {
         id: {
             type: DataTypes.INTEGER,
@@ -30,7 +31,7 @@ Form.init(
             type: DataTypes.INTEGER,
             allowNull: false,
             references: {
-                model: User,
+                model: Users,
                 key: "id",
             },
             field: "owner_id",
@@ -54,23 +55,13 @@ Form.init(
         themeId: {
             type: DataTypes.INTEGER,
             defaultValue: 1,
-            references: { model: Theme, key: "id" },
+            references: { model: Themes, key: "id" },
             field: "theme_id",
-        },
-        likes: {
-            type: DataTypes.INTEGER,
-            defaultValue: 0,
-        },
-        createdAt: {
-            type: DataTypes.DATE,
-            allowNull: false,
-            defaultValue: Sequelize.fn("NOW"),
-            field: "created_at",
         },
     },
     {
-        updatedAt: false,
-        tableName: "form",
+        timestamps: false,
+        tableName: "forms",
         sequelize,
     }
 );

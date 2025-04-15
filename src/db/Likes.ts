@@ -3,12 +3,12 @@ import { sequelize } from "./index.js";
 import { Forms } from "./Forms.js";
 import { Users } from "./Users.js";
 
-export class FormUser extends Model {
-    declare formId: number;
-    declare userId: number;
+export class Likes extends Model {
+    declare formId: Number;
+    declare userId: Number;
 }
 
-FormUser.init(
+Likes.init(
     {
         formId: {
             type: DataTypes.INTEGER,
@@ -33,8 +33,8 @@ FormUser.init(
     },
     {
         sequelize,
-        tableName: "form_user",
         timestamps: false,
+        tableName: "likes",
         indexes: [
             {
                 unique: true,
@@ -44,4 +44,4 @@ FormUser.init(
     }
 );
 
-FormUser.removeAttribute("id");
+Likes.removeAttribute("id");
