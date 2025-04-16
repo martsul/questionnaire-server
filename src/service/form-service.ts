@@ -110,7 +110,7 @@ export class FormService {
     }
 
     async #deleteOldImg(formId: number, newImg: ClientImg) {
-        if (typeof newImg !== "string" || newImg === "") return;
+        if (typeof newImg === "string" && newImg !== "") return;
         const imgSrc = await this.#findOldImg(formId);
         if (imgSrc) {
             const imgId = imgSrc.img
