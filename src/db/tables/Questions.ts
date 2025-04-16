@@ -1,6 +1,6 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from "./index.js";
-import { QuestionType } from "../types/questions-type.js";
+import { sequelize } from "../index.js";
+import { QuestionType } from "../../types/questions-type.js";
 import { Forms } from "./Forms.js";
 
 export class Questions extends Model {
@@ -21,10 +21,10 @@ Questions.init(
             type: DataTypes.INTEGER,
             field: "form_id",
             references: { model: Forms, key: "id" },
-            onDelete: "CASCADE"
+            onDelete: "CASCADE",
         },
         type: { type: DataTypes.STRING(15) },
-        title: { type: DataTypes.STRING(40) }, 
+        title: { type: DataTypes.STRING(40) },
         description: { type: DataTypes.STRING(100) },
         index: { type: DataTypes.INTEGER },
         inStatistic: { type: DataTypes.BOOLEAN, field: "in_statistic" },

@@ -1,9 +1,8 @@
 import { DataTypes, Model, Sequelize } from "sequelize";
 import { Users } from "./Users.js";
 import { Themes } from "./Themes.js";
-import { sequelize } from "./index.js";
+import { sequelize } from "../index.js";
 import { Questions } from "./Questions.js";
-import { Likes } from "./Likes.js";
 
 export class Forms extends Model {
     declare id: number;

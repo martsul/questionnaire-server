@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from "./index.js";
+import { sequelize } from "../index.js";
 import { Users } from "./Users.js";
 
 export class Tokens extends Model {

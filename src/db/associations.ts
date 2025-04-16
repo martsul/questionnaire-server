@@ -1,13 +1,14 @@
 import { syncDatabase } from "./index.js";
-import { Forms } from "./Forms.js";
-import { FormTag } from "./Form-Tag.js";
-import { FormUser } from "./Form-User.js";
-import { Tags } from "./Tags.js";
-import { Themes } from "./Themes.js";
-import { Tokens } from "./Tokens.js";
-import { Users } from "./Users.js";
-import { Questions } from "./Questions.js";
-import { Likes } from "./Likes.js";
+import { Forms } from "./tables/Forms.js";
+import { FormTag } from "./tables/Form-Tag.js";
+import { FormUser } from "./tables/Form-User.js";
+import { Tags } from "./tables/Tags.js";
+import { Themes } from "./tables/Themes.js";
+import { Tokens } from "./tables/Tokens.js";
+import { Users } from "./tables/Users.js";
+import { Questions } from "./tables/Questions.js";
+import { Likes } from "./tables/Likes.js";
+import { Comments } from "./tables/Comments.js";
 
 Users.hasOne(Tokens, {
     foreignKey: "userId",
@@ -27,6 +28,11 @@ Users.belongsToMany(Forms, {
 });
 
 Users.hasMany(Likes, {
+    foreignKey: "userId",
+    sourceKey: "id",
+});
+
+Users.hasMany(Comments, {
     foreignKey: "userId",
     sourceKey: "id",
 });
@@ -71,6 +77,10 @@ Forms.belongsToMany(Users, {
     as: "users",
 });
 
+Forms.hasMany(Comments, {
+    foreignKey: "formId",
+    sourceKey: "id",
+});
 
 Tags.belongsToMany(Forms, {
     through: FormTag,
@@ -95,6 +105,16 @@ Likes.belongsTo(Users, {
 
 Likes.belongsTo(Forms, {
     foreignKey: "formId",
+    targetKey: "id",
+});
+
+Comments.belongsTo(Forms, {
+    foreignKey: "formId",
+    targetKey: "id",
+});
+
+Comments.belongsTo(Users, {
+    foreignKey: "userId",
     targetKey: "id",
 });
 

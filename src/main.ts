@@ -3,10 +3,10 @@ import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import { router } from "./router/index.js";
-import { testBDConnection } from "./helpers/test-bd-connection.js";
-import { initAssociations } from "./db/associations.js";
-import { v2 as cloudinary } from "cloudinary";
-
+import { cloudConnect } from "./db/cloud-connect.js";
+import { Server } from "http";
+import { wsInit } from "./ws/index.js";
+import { dbInit } from "./db/db-init.js";
 
 dotenv.config();
 
@@ -29,17 +29,12 @@ app.use("/api", router);
 
 (async () => {
     try {
-        cloudinary.config({
-            cloud_name: process.env.CLOUD_NAME,
-            api_key: process.env.CLOUD_API_KEY,
-            api_secret: process.env.CLOUD_API_SECRET,
-        });
-
-        await testBDConnection();
-        initAssociations();
-        app.listen(PORT, () => {
+        cloudConnect();
+        await dbInit();
+        const server: Server = app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
+        wsInit(server)
     } catch (error) {
         console.error(error);
     }

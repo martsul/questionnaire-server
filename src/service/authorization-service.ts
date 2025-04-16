@@ -1,4 +1,4 @@
-import { Users } from "../db/Users.js";
+import { Users } from "../db/tables/Users.js";
 import { AuthorizationBody } from "../types/authorization-body.js";
 import { hash, compare } from "bcrypt-ts";
 

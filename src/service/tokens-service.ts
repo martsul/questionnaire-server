@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { Tokens } from "../db/Tokens.js";
+import { Tokens } from "../db/tables/Tokens.js";
 import { config } from "dotenv";
 import { TokensServiceConstructor } from "../types/tokens-service-constructor.js";
 

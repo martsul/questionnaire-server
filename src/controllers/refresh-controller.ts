@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { config } from "dotenv";
-import { Users } from "../db/Users.js";
+import { Users } from "../db/tables/Users.js";
 import { AuthorizationError } from "../errors/authorization-error.js";
 import { TokensService } from "../service/tokens-service.js";
 

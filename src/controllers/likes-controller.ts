@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { likeRequest } from "../types/like-request.js";
-import { Likes } from "../db/Likes.js";
+import { Likes } from "../db/tables/Likes.js";
 
 export const likeController = async (req: Request, res: Response) => {
     try {

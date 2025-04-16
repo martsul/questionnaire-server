@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import { sequelize } from "./index.js";
+import { sequelize } from "../index.js";
 
 export class Themes extends Model {
     declare id: number;
@@ -26,5 +26,3 @@ Themes.init(
     },
     { tableName: "themes", timestamps: false, sequelize }
 );
-
-

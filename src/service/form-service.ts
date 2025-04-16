@@ -1,17 +1,17 @@
-import { Forms } from "../db/Forms.js";
-import { Themes } from "../db/Themes.js";
-import { Users } from "../db/Users.js";
+import { Forms } from "../db/tables/Forms.js";
+import { Themes } from "../db/tables/Themes.js";
+import { Users } from "../db/tables/Users.js";
 import { v2 as cloudinary } from "cloudinary";
 import { ClientImg } from "../types/client-img.js";
 import { UpdateFormData } from "../types/update-form-data.js";
-import { Tags } from "../db/Tags.js";
+import { Tags } from "../db/tables/Tags.js";
 import { Op, Sequelize } from "sequelize";
-import { FormTag } from "../db/Form-Tag.js";
-import { FormUser } from "../db/Form-User.js";
+import { FormTag } from "../db/tables/Form-Tag.js";
+import { FormUser } from "../db/tables/Form-User.js";
 import { UsersCollection } from "../types/users-collection.js";
-import { Questions } from "../db/Questions.js";
+import { Questions } from "../db/tables/Questions.js";
 import { QuestionForm } from "../types/question-form.js";
-import { Likes } from "../db/Likes.js";
+import { Likes } from "../db/tables/Likes.js";
 
 export class FormService {
     async create(data: { id: number }) {

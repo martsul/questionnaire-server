@@ -1,5 +1,5 @@
 import { Op } from "sequelize";
-import { Users } from "../db/Users.js";
+import { Users } from "../db/tables/Users.js";
 
 export class UsersService {
     #id: number;
