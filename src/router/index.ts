@@ -10,23 +10,29 @@ import { tagController } from "../controllers/tag-controller.js";
 import { themeController } from "../controllers/theme-controller.js";
 import { userController } from "../controllers/user-controller.js";
 import { likeController } from "../controllers/likes-controller.js";
+import { postAnswerController } from "../controllers/post-answer-controller.js";
+import { getAnswersController } from "../controllers/get-answers-controller.js";
+import { getStatisticController } from "../controllers/get-statistic-controlle.js";
 
 export const router = Router();
 
 router.post("/signin", authorizationController("signin"));
 router.post("/signup", authorizationController("signup"));
-router.post("/logout",  logoutController);
-router.get("/refresh", refreshController)
-router.get("/auth_request", authMiddleware, authorizationRequestController)
-router.get("/users", authMiddleware, usersController("getUsers"))
-router.post("/block", authMiddleware, usersController("block"))
-router.post("/unblock", authMiddleware, usersController("unblock"))
-router.post("/give_admin", authMiddleware, usersController("giveAdmin"))
-router.post("/take_admin", authMiddleware, usersController("takeAdmin"))
-router.post("/form", fromController("create"))
-router.get("/form", fromController("get"))
-router.put("/form", fromController("update"))
-router.get("/tag", tagController)
-router.get("/theme", themeController)
-router.get("/user", userController)
-router.post("/like", likeController)
+router.post("/logout", logoutController);
+router.get("/refresh", refreshController);
+router.get("/auth_request", authMiddleware, authorizationRequestController);
+router.get("/users", authMiddleware, usersController("getUsers"));
+router.post("/block", authMiddleware, usersController("block"));
+router.post("/unblock", authMiddleware, usersController("unblock"));
+router.post("/give_admin", authMiddleware, usersController("giveAdmin"));
+router.post("/take_admin", authMiddleware, usersController("takeAdmin"));
+router.post("/form", fromController("create"));
+router.get("/form", fromController("get"));
+router.put("/form", fromController("update"));
+router.get("/tag", tagController);
+router.get("/theme", themeController);
+router.get("/user", userController);
+router.post("/like", likeController);
+router.get("/answers", getAnswersController);
+router.post("/answer", postAnswerController);
+router.get("/statistic", getStatisticController);

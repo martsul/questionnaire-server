@@ -9,6 +9,7 @@ import { Users } from "./tables/Users.js";
 import { Questions } from "./tables/Questions.js";
 import { Likes } from "./tables/Likes.js";
 import { Comments } from "./tables/Comments.js";
+import { Answers } from "./tables/Answers.js";
 
 Users.hasOne(Tokens, {
     foreignKey: "userId",
@@ -33,6 +34,11 @@ Users.hasMany(Likes, {
 });
 
 Users.hasMany(Comments, {
+    foreignKey: "userId",
+    sourceKey: "id",
+});
+
+Users.hasMany(Answers, {
     foreignKey: "userId",
     sourceKey: "id",
 });
@@ -98,6 +104,11 @@ Questions.belongsTo(Forms, {
     targetKey: "id",
 });
 
+Questions.hasMany(Answers, {
+    foreignKey: "questionId",
+    sourceKey: "id",
+});
+
 Likes.belongsTo(Users, {
     foreignKey: "userId",
     targetKey: "id",
@@ -116,6 +127,17 @@ Comments.belongsTo(Forms, {
 Comments.belongsTo(Users, {
     foreignKey: "userId",
     targetKey: "id",
+});
+
+Answers.belongsTo(Users, {
+    foreignKey: "userId",
+    targetKey: "id",
+});
+
+Answers.belongsTo(Questions, {
+    foreignKey: "questionId",
+    targetKey: "id",
+    onDelete: "CASCADE",
 });
 
 syncDatabase();

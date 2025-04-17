@@ -18,11 +18,6 @@ Themes.init(
             allowNull: false,
             unique: true,
         },
-        themeVector: {
-            type: DataTypes.TSVECTOR,
-            allowNull: true,
-            field: "theme_vector",
-        },
     },
     { tableName: "themes", timestamps: false, sequelize }
 );
