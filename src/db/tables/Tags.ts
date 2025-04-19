@@ -18,11 +18,6 @@ Tags.init(
             allowNull: false,
             unique: true,
         },
-        tagVector: {
-            type: DataTypes.TSVECTOR,
-            allowNull: true,
-            field: "tag_vector",
-        },
     },
     {
         timestamps: false,

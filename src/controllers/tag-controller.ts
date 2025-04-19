@@ -1,15 +1,30 @@
 import { Request, Response } from "express";
-import { ResponseTags } from "../types/response-tags.js";
-import { tagQuery } from "../helpers/tag-query.js";
+import { typesenseClient } from "../db/typesense/index.js";
+import { SearchResponse } from "typesense/lib/Typesense/Documents.js";
 
-export const tagController = async (req: Request, res: Response) => {
+type TagDocument = {
+    id: string;
+    tag: string;
+};
+
+export const tagController = async (
+    req: Request<any, any, any, { tag: string }>,
+    res: Response
+) => {
     try {
         const { tag } = req.query;
-        const result: ResponseTags[] = await tagQuery(tag as string);
-        const convertResult = result.map((e) => e.tag);
-        res.send(convertResult);
+        const result = (await typesenseClient
+            .collections("tags")
+            .documents()
+            .search({
+                q: tag,
+                query_by: "tag",
+                prefix: true,
+                per_page: 10,
+            })) as SearchResponse<TagDocument>;
+        res.send(result.hits?.map((hit) => hit.document.tag));
     } catch (error) {
-        res.status(500).send()
+        res.status(500).send();
         console.log(error);
     }
 };

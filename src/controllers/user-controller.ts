@@ -1,6 +1,13 @@
 import { Request, Response } from "express";
 import { UserRequestQuery } from "../types/user-request-query.js";
-import { userQuery } from "../helpers/user-query.js";
+import { typesenseClient } from "../db/typesense/index.js";
+import { SearchResponse } from "typesense/lib/Typesense/Documents.js";
+
+type UserDocument = {
+    id: string;
+    name: string;
+    email: string;
+};
 
 export const userController = async (
     req: Request<any, any, any, UserRequestQuery>,
@@ -8,10 +15,18 @@ export const userController = async (
 ) => {
     try {
         const { user, userFilter } = req.query;
-        const result = await userQuery(user, userFilter);
-        res.json(result);
+        const result = (await typesenseClient
+            .collections("users")
+            .documents()
+            .search({
+                q: user,
+                query_by: userFilter,
+                prefix: true,
+                per_page: 10,
+            })) as SearchResponse<UserDocument>;
+        res.send(result.hits?.map(hit => hit.document));
     } catch (error) {
-        res.status(500).send()
+        res.status(500).send();
         console.log(error);
     }
 };

@@ -1,6 +1,5 @@
 import { ClientImg } from "./client-img.js";
 import { QuestionFromClient } from "./question-from-client.js";
-import { UsersCollection } from "./users-collection.js";
 
 export type UpdateFormData = {
     formId: number;
@@ -10,6 +9,6 @@ export type UpdateFormData = {
     theme: string;
     isPublic: boolean;
     tags: string[];
-    users: UsersCollection;
+    users: number[];
     questions: QuestionFromClient[];
 };

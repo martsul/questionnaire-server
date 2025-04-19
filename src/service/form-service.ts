@@ -205,12 +205,12 @@ export class FormService {
         await this.#updateTagsDb(tags, formId);
     }
 
-    async #addUsers(users: Users["id"][], formId: number) {
+    async #addUsers(users: number[], formId: number) {
         const covertUsers = users.map((u) => ({ userId: u, formId }));
         await FormUser.bulkCreate(covertUsers, { ignoreDuplicates: true });
     }
 
-    async #deleteUsers(users: Users["id"][], formId: number) {
+    async #deleteUsers(users: number[], formId: number) {
         await FormUser.destroy({
             where: {
                 formId: formId,
@@ -221,10 +221,9 @@ export class FormService {
         });
     }
 
-    async #updateUsers(users: UsersCollection, formId: number) {
-        console.log(users);
-        await this.#addUsers(Object.keys(users).map(Number), formId);
-        await this.#deleteUsers(Object.keys(users).map(Number), formId);
+    async #updateUsers(users: number[], formId: number) {
+        await this.#addUsers(users, formId);
+        await this.#deleteUsers(users, formId);
     }
 
     async #updateQuestions(data: UpdateFormData) {
