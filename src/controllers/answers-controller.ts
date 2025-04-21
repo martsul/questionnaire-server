@@ -2,25 +2,24 @@ import { Request, Response } from "express";
 import { Answers } from "../db/tables/Answers.js";
 import { Users } from "../db/tables/Users.js";
 
-export const getAnswersController = async (
+export const answersController = async (
     req: Request<any, any, any, { formId: number }>,
     res: Response
 ) => {
     try {
         const { formId } = req.query;
         const result = await Answers.findAll({
-            where: { formId },
+            where: { formId, inStatistic: true },
             attributes: ["createdAt", "resultId"],
             include: { model: Users, attributes: ["name", "email"] },
             group: [
                 "resultId",
                 "createdAt",
                 "User.id",
-                "name",
-                "email",
-                "Answers.id",
+                "User.name",
+                "User.email",
             ],
-            order: [["id", "ASC"]],
+            order: [["created_at", "ASC"]],
         });
         res.send(
             result.map((r) => ({

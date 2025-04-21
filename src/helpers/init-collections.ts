@@ -14,7 +14,15 @@ export const initCollections = async () => {
             .catch(() => {});
         await typesenseClient.collections().create(tagsCollection);
         await typesenseClient.collections().create(usersCollection);
-    } catch (error) {
+    } catch (error: any) {
+        if (
+            error.httpStatus === 503 ||
+            error.httpStatus === 404 ||
+            error.message.includes("Not Ready or Lagging") ||
+            error.message.includes("Not Found")
+        ) {
+            await initCollections();
+        }
         console.error("Error Init Collection", error);
     }
 };

@@ -11,8 +11,9 @@ import { themeController } from "../controllers/theme-controller.js";
 import { userController } from "../controllers/user-controller.js";
 import { likeController } from "../controllers/likes-controller.js";
 import { postAnswerController } from "../controllers/post-answer-controller.js";
-import { getAnswersController } from "../controllers/get-answers-controller.js";
+import { answersController } from "../controllers/answers-controller.js";
 import { getStatisticController } from "../controllers/get-statistic-controlle.js";
+import { getAnswerController } from "../controllers/get-answer-controller.js";
 
 export const router = Router();
 
@@ -33,6 +34,7 @@ router.get("/tag", tagController);
 router.get("/theme", themeController);
 router.get("/user", userController);
 router.post("/like", likeController);
-router.get("/answers", getAnswersController);
+router.get("/answer", getAnswerController);
 router.post("/answer", postAnswerController);
+router.get("/answers", answersController);
 router.get("/statistic", getStatisticController);

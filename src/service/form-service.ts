@@ -5,10 +5,9 @@ import { v2 as cloudinary } from "cloudinary";
 import { ClientImg } from "../types/client-img.js";
 import { UpdateFormData } from "../types/update-form-data.js";
 import { Tags } from "../db/tables/Tags.js";
-import { Op, Sequelize } from "sequelize";
+import { Op } from "sequelize";
 import { FormTag } from "../db/tables/Form-Tag.js";
 import { FormUser } from "../db/tables/Form-User.js";
-import { UsersCollection } from "../types/users-collection.js";
 import { Questions } from "../db/tables/Questions.js";
 import { QuestionForm } from "../types/question-form.js";
 import { Likes } from "../db/tables/Likes.js";
@@ -112,7 +111,7 @@ export class FormService {
     async #deleteOldImg(formId: number, newImg: ClientImg) {
         if (typeof newImg === "string" && newImg !== "") return;
         const imgSrc = await this.#findOldImg(formId);
-        if (imgSrc) {
+        if (imgSrc?.img) {
             const imgId = imgSrc.img
                 .split("/")
                 .slice(-2)

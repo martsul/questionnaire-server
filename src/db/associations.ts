@@ -140,6 +140,12 @@ Answers.belongsTo(Questions, {
     onDelete: "CASCADE",
 });
 
+Answers.belongsTo(Forms, {
+    foreignKey: "formId",
+    targetKey: "id",
+    onDelete: "CASCADE",
+});
+
 syncDatabase();
 
 export const initAssociations = () => {

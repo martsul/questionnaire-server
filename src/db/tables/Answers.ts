@@ -14,6 +14,7 @@ export class Answers extends Model {
     declare formId: number;
     declare User: Users;
     declare answerCount: number;
+    declare inStatistic: boolean;
     declare Question: Questions;
 }
 
@@ -52,6 +53,11 @@ Answers.init(
             onDelete: "CASCADE",
             field: "question_id",
         },
+        inStatistic: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            field: "in_statistic",
+        },
         answer: {
             type: DataTypes.STRING(250),
             allowNull: false,
@@ -64,7 +70,7 @@ Answers.init(
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: Date.now(),
+            defaultValue: sequelize.fn("NOW"),
             field: "created_at",
         },
     },

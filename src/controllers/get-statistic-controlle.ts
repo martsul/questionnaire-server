@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { Answers } from "../db/tables/Answers.js";
 import { Questions } from "../db/tables/Questions.js";
-import { Sequelize } from "sequelize";
+import { Op, Sequelize } from "sequelize";
 
 type RequestQuery = { formId: number };
 
 const answersQuery = async (formId: number) => {
     return await Answers.findAll({
-        where: { formId },
+        where: { formId, answer: { [Op.not]: "" } },
         attributes: [
             "questionId",
             "answer",
@@ -17,7 +17,13 @@ const answersQuery = async (formId: number) => {
             ],
         ],
         include: { model: Questions, attributes: ["title"] },
-        group: ["Question.title", "Answers.answer", "Question.id", "Answers.question_id"],
+        group: [
+            "Question.title",
+            "Answers.answer",
+            "Question.id",
+            "Answers.question_id",
+        ],
+        order: [[{ model: Questions, as: "Question" }, "index", "ASC"]],
     });
 };
 

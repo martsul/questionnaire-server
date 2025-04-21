@@ -3,6 +3,7 @@ import { AnswerRequestBody } from "../types/answer-request-body.js";
 import { sequelize } from "../db/index.js";
 import { Answers } from "../db/tables/Answers.js";
 import { Transaction } from "sequelize";
+import { Questions } from "../db/tables/Questions.js";
 
 type ConvertedData = {
     formId: number;
@@ -10,6 +11,15 @@ type ConvertedData = {
     resultId: number;
     questionId: string;
     answer: string;
+    inStatistic: boolean;
+};
+
+const getInStatistic = async (ids: string[]) => {
+    const questions = await Questions.findAll({
+        where: { id: ids },
+        attributes: ["id", "inStatistic"],
+    });
+    return new Map(questions.map((q) => [q.id, q.inStatistic]));
 };
 
 const findResultId = async (transaction: Transaction) => {
@@ -19,12 +29,13 @@ const findResultId = async (transaction: Transaction) => {
     return maxResult ? maxResult + 1 : 1;
 };
 
-const convertData = (
+const convertData = async (
     data: AnswerRequestBody,
     resultId: number
-): ConvertedData[] => {
+): Promise<ConvertedData[]> => {
     const { formId, userId, answers } = data;
     const convertedData: ConvertedData[] = [];
+    const inStatisticAnswers = await getInStatistic(Object.keys(answers));
     Object.keys(answers).forEach((questionId) => {
         if (Array.isArray(answers[questionId])) {
             answers[questionId].forEach((answer) => {
@@ -34,6 +45,7 @@ const convertData = (
                     resultId,
                     questionId,
                     answer,
+                    inStatistic: inStatisticAnswers.get(questionId) as boolean,
                 });
             });
         } else {
@@ -43,6 +55,7 @@ const convertData = (
                 resultId,
                 questionId,
                 answer: answers[questionId],
+                inStatistic: inStatisticAnswers.get(questionId) as boolean,
             });
         }
     });
@@ -56,7 +69,7 @@ export const postAnswerController = async (
     try {
         await sequelize.transaction(async (transaction) => {
             const resultId = await findResultId(transaction);
-            const convertedData = convertData(req.body, resultId);
+            const convertedData = await convertData(req.body, resultId);
             await Answers.bulkCreate(convertedData, { transaction });
             res.send("ok");
         });

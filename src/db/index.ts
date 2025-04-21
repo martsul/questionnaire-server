@@ -12,11 +12,13 @@ if (!dbUrl) {
 export const sequelize = new Sequelize(dbUrl, {
     dialect: "postgres",
     dialectOptions: {
+        useUTC: true,
         ssl: {
             require: true,
         },
     },
-    logging: false
+    logging: false,
+    timezone: "UTC"
 });
 
 export const syncDatabase = async () => {
