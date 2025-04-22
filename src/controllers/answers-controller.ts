@@ -31,6 +31,6 @@ export const answersController = async (
         );
     } catch (error) {
         res.status(500).send();
-        console.log(error);
+        console.error(error);
     }
 };

@@ -11,7 +11,7 @@ export const fromController = (action: FormControllerAction) => {
             const result = await formService[action](data);
             res.json(result);
         } catch (error) {
-            console.log(error)
+            console.error(error);
             res.status(500).send(getErrorMessage(error));
         }
     };

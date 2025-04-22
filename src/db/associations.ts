@@ -26,6 +26,7 @@ Users.belongsToMany(Forms, {
     foreignKey: "userId",
     otherKey: "formId",
     as: "forms",
+    onDelete: "CASCADE",
 });
 
 Users.hasMany(Likes, {
@@ -46,6 +47,7 @@ Users.hasMany(Answers, {
 Tokens.belongsTo(Users, {
     foreignKey: "userId",
     targetKey: "id",
+    onDelete: "CASCADE",
 });
 
 Forms.hasMany(Likes, {
@@ -88,10 +90,38 @@ Forms.hasMany(Comments, {
     sourceKey: "id",
 });
 
+Forms.hasMany(Answers, {
+    foreignKey: "formId",
+    sourceKey: "id",
+});
+
+Forms.belongsToMany(Tags, {
+    through: FormTag,
+    foreignKey: "formId",
+    otherKey: "tagId",
+    as: "Tags",
+    onDelete: "CASCADE",
+});
+
+Forms.belongsToMany(Users, {
+    through: FormUser,
+    foreignKey: "formId",
+    otherKey: "userId",
+    as: "forms",
+    onDelete: "CASCADE",
+});
+
 Tags.belongsToMany(Forms, {
     through: FormTag,
     foreignKey: "tagId",
     otherKey: "formId",
+    as: "Forms",
+    onDelete: "CASCADE",
+});
+
+Tags.hasMany(FormTag, {
+    foreignKey: "tagId",
+    sourceKey: "id",
 });
 
 Themes.hasMany(Forms, {
@@ -102,6 +132,7 @@ Themes.hasMany(Forms, {
 Questions.belongsTo(Forms, {
     foreignKey: "formId",
     targetKey: "id",
+    onDelete: "CASCADE",
 });
 
 Questions.hasMany(Answers, {
@@ -117,11 +148,13 @@ Likes.belongsTo(Users, {
 Likes.belongsTo(Forms, {
     foreignKey: "formId",
     targetKey: "id",
+    onDelete: "CASCADE",
 });
 
 Comments.belongsTo(Forms, {
     foreignKey: "formId",
     targetKey: "id",
+    onDelete: "CASCADE",
 });
 
 Comments.belongsTo(Users, {

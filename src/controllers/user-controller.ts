@@ -27,6 +27,6 @@ export const userController = async (
         res.send(result.hits?.map(hit => hit.document));
     } catch (error) {
         res.status(500).send();
-        console.log(error);
+        console.error(error);
     }
 };

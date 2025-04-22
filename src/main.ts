@@ -7,6 +7,8 @@ import { cloudConnect } from "./db/cloud-connect.js";
 import { Server } from "http";
 import { wsInit } from "./ws/index.js";
 import { dbInit } from "./db/db-init.js";
+import { Users } from "./db/tables/Users.js";
+import { where } from "sequelize";
 
 dotenv.config();
 
@@ -34,7 +36,7 @@ app.use("/api", router);
         const server: Server = app.listen(PORT, () => {
             console.log(`Server is running on port ${PORT}`);
         });
-        wsInit(server)
+        wsInit(server);
     } catch (error) {
         console.error(error);
     }

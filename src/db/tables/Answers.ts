@@ -41,6 +41,7 @@ Answers.init(
                 model: Forms,
                 key: "id",
             },
+            onDelete: "CASCADE",
             field: "form_id",
         },
         questionId: {

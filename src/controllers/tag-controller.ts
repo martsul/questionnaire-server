@@ -25,6 +25,6 @@ export const tagController = async (
         res.send(result.hits?.map((hit) => hit.document.tag));
     } catch (error) {
         res.status(500).send();
-        console.log(error);
+        console.error(error);
     }
 };

@@ -45,7 +45,7 @@ Comments.init(
         createdAt: {
             type: DataTypes.DATE,
             allowNull: false,
-            defaultValue: Date.now(),
+            defaultValue: sequelize.fn("NOW"),
         },
     },
     {

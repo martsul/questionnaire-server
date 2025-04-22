@@ -17,6 +17,8 @@ export class Forms extends Model {
     declare tags: { tag: string }[];
     declare users: { name: string; id: number; email: string }[];
     declare Questions: Questions;
+    declare numberResponse: number;
+    declare creator: string;
 }
 
 Forms.init(
@@ -57,9 +59,14 @@ Forms.init(
             references: { model: Themes, key: "id" },
             field: "theme_id",
         },
+        createdAt: {
+            type: DataTypes.DATE,
+            allowNull: false,
+            defaultValue: sequelize.fn("NOW"),
+        },
     },
     {
-        timestamps: false,
+        updatedAt: false,
         tableName: "forms",
         sequelize,
     }

@@ -14,6 +14,7 @@ import { postAnswerController } from "../controllers/post-answer-controller.js";
 import { answersController } from "../controllers/answers-controller.js";
 import { getStatisticController } from "../controllers/get-statistic-controlle.js";
 import { getAnswerController } from "../controllers/get-answer-controller.js";
+import { homePageController } from "../controllers/home-page-controller.js";
 
 export const router = Router();
 
@@ -30,6 +31,7 @@ router.post("/take_admin", authMiddleware, usersController("takeAdmin"));
 router.post("/form", fromController("create"));
 router.get("/form", fromController("get"));
 router.put("/form", fromController("update"));
+router.delete("/form", fromController("delete"));
 router.get("/tag", tagController);
 router.get("/theme", themeController);
 router.get("/user", userController);
@@ -38,3 +40,4 @@ router.get("/answer", getAnswerController);
 router.post("/answer", postAnswerController);
 router.get("/answers", answersController);
 router.get("/statistic", getStatisticController);
+router.get("/home_page", homePageController);

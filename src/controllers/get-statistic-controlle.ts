@@ -36,7 +36,7 @@ export const getStatisticController = async (
         const answers = await answersQuery(formId);
         res.send(answers);
     } catch (error) {
+        console.error(error);
         res.status(500).send;
-        console.log(error);
     }
 };

@@ -13,6 +13,10 @@ import { QuestionForm } from "../types/question-form.js";
 import { Likes } from "../db/tables/Likes.js";
 
 export class FormService {
+    async delete(data: { id: number }) {
+        return await Forms.destroy({ where: { id: data.id } });
+    }
+
     async create(data: { id: number }) {
         return await Forms.create({ ownerId: data.id });
     }
