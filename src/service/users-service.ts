@@ -1,5 +1,6 @@
 import { Op } from "sequelize";
 import { Users } from "../db/tables/Users.js";
+import { Forms } from "../db/tables/Forms.js";
 
 export class UsersService {
     #id: number;
@@ -9,15 +10,24 @@ export class UsersService {
     }
 
     async getUsers() {
-        const users = await Users.findAll({
+        const users = await this.#queryUsers();
+        const { isAdmin, isBlocked } = users.find(
+            (user) => user.id === this.#id
+        )?.dataValues || { isAdmin: false, isBlocked: false };
+        return {
+            users,
+            status: {
+                isAdmin,
+                isBlocked,
+            },
+        };
+    }
+
+    async #queryUsers() {
+        return await Users.findAll({
             attributes: ["id", "name", "isAdmin", "isBlocked"],
             order: ["id"],
         });
-        const status = await Users.findOne({
-            attributes: ["isAdmin", "isBlocked"],
-            where: { id: this.#id },
-        });
-        return { users, status };
     }
 
     async block(ids: number[]) {

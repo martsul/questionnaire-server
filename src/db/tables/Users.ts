@@ -39,16 +39,6 @@ Users.init(
             defaultValue: false,
             field: "is_admin",
         },
-        nameVector: {
-            type: DataTypes.TSVECTOR,
-            allowNull: true,
-            field: "name_vector",
-        },
-        emailVector: {
-            type: DataTypes.TSVECTOR,
-            allowNull: true,
-            field: "email_vector",
-        },
     },
     { sequelize, tableName: "users", timestamps: false }
 );

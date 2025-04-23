@@ -15,6 +15,8 @@ import { answersController } from "../controllers/answers-controller.js";
 import { getStatisticController } from "../controllers/get-statistic-controlle.js";
 import { getAnswerController } from "../controllers/get-answer-controller.js";
 import { homePageController } from "../controllers/home-page-controller.js";
+import { ownFormsController } from "../controllers/own-forms.controller.js";
+import { ownAnswersController } from "../controllers/ownAnswersController.js";
 
 export const router = Router();
 
@@ -41,3 +43,6 @@ router.post("/answer", postAnswerController);
 router.get("/answers", answersController);
 router.get("/statistic", getStatisticController);
 router.get("/home_page", homePageController);
+router.get("/own_forms", ownFormsController);
+router.get("/own_answers", ownAnswersController);
+
