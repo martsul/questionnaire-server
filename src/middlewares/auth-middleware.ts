@@ -27,5 +27,6 @@ export const authMiddleware = async (
         if (error instanceof Error) {
             res.status(401).send("Unauthorized");
         }
+        console.error(error)
     }
 };

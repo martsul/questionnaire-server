@@ -39,6 +39,7 @@ export const refreshController = async (req: Request, res: Response) => {
         });
         res.json(tokens);
     } catch (error) {
+        console.error(error)
         res.status(401).send("Unauthorized");
     }
 };

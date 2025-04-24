@@ -14,6 +14,7 @@ export const likeController = async (req: Request, res: Response) => {
         }
         res.send();
     } catch (error) {
+        console.error(error)
         res.status(500).send();
     }
 };

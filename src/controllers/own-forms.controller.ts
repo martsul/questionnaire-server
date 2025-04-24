@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { Forms } from "../db/tables/Forms.js";
 
 export const ownFormsController = async (
-    req: Request<any, any, any, { ownerId: number }>,
+    req: Request<unknown, unknown, unknown, { ownerId: number }>,
     res: Response
 ) => {
     try {
@@ -13,7 +13,7 @@ export const ownFormsController = async (
         });
         res.send(forms);
     } catch (error) {
-        res.status(500).send();
         console.error(error);
+        res.status(500).send();
     }
 };

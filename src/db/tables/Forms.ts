@@ -3,6 +3,8 @@ import { Users } from "./Users.js";
 import { Themes } from "./Themes.js";
 import { sequelize } from "../index.js";
 import { Questions } from "./Questions.js";
+import { Tags } from "./Tags.js";
+import { Comments } from "./Comments.js";
 
 export class Forms extends Model {
     declare id: number;
@@ -12,13 +14,15 @@ export class Forms extends Model {
     declare img: string;
     declare isPublic: boolean;
     declare themeId: number;
-    declare Theme: Themes;
     declare owner: { name: string };
     declare tags: { tag: string }[];
     declare users: { name: string; id: number; email: string }[];
-    declare Questions: Questions;
     declare numberResponse: number;
     declare creator: string;
+    declare Theme: Themes;
+    declare Tags: Tags[];
+    declare Questions: Questions[];
+    declare Comments: Comments[];
 }
 
 Forms.init(

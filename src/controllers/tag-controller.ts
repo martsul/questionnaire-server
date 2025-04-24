@@ -8,7 +8,7 @@ type TagDocument = {
 };
 
 export const tagController = async (
-    req: Request<any, any, any, { tag: string }>,
+    req: Request<unknown, unknown, unknown, { tag: string }>,
     res: Response
 ) => {
     try {
@@ -24,7 +24,7 @@ export const tagController = async (
             })) as SearchResponse<TagDocument>;
         res.send(result.hits?.map((hit) => hit.document.tag));
     } catch (error) {
-        res.status(500).send();
         console.error(error);
+        res.status(500).send();
     }
 };

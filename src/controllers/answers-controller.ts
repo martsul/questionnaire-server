@@ -3,7 +3,7 @@ import { Answers } from "../db/tables/Answers.js";
 import { Users } from "../db/tables/Users.js";
 
 export const answersController = async (
-    req: Request<any, any, any, { formId: number }>,
+    req: Request<unknown, unknown, unknown, { formId: number }>,
     res: Response
 ) => {
     try {
@@ -30,7 +30,7 @@ export const answersController = async (
             }))
         );
     } catch (error) {
-        res.status(500).send();
         console.error(error);
+        res.status(500).send();
     }
 };

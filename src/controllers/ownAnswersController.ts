@@ -5,7 +5,7 @@ import { Users } from "../db/tables/Users.js";
 import { Forms } from "../db/tables/Forms.js";
 
 export const ownAnswersController = async (
-    req: Request<any, any, any, { userId: number }>,
+    req: Request<unknown, unknown, unknown, { userId: number }>,
     res: Response
 ) => {
     try {
@@ -23,6 +23,7 @@ export const ownAnswersController = async (
                 { model: Users, attributes: [] },
                 { model: Forms, attributes: [] },
             ],
+            order: [["answerId", "ASC"]]
         });
         res.send(answers);
     } catch (error) {

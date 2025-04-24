@@ -63,7 +63,7 @@ const convertData = async (
 };
 
 export const postAnswerController = async (
-    req: Request<any, any, AnswerRequestBody>,
+    req: Request<unknown, unknown, AnswerRequestBody>,
     res: Response
 ) => {
     try {

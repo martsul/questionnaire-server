@@ -57,7 +57,7 @@ const formatAnswers = (answers: Awaited<ReturnType<typeof requestAnswers>>) => {
 };
 
 export const getAnswerController = async (
-    req: Request<any, any, any, { answerId: number }>,
+    req: Request<unknown, unknown, unknown, { answerId: number }>,
     res: Response
 ) => {
     try {
@@ -66,7 +66,7 @@ export const getAnswerController = async (
         const formattedAnswers = formatAnswers(answers);
         res.send(formattedAnswers);
     } catch (error) {
-        res.status(404).send();
         console.error(error);
+        res.status(404).send();
     }
 };

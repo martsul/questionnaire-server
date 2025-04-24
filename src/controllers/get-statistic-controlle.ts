@@ -28,7 +28,7 @@ const answersQuery = async (formId: number) => {
 };
 
 export const getStatisticController = async (
-    req: Request<any, any, any, RequestQuery>,
+    req: Request<unknown, unknown, unknown, RequestQuery>,
     res: Response
 ) => {
     try {

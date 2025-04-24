@@ -1,3 +1,4 @@
+import { formsCollection } from "../db/typesense/collections/forms-collections.js";
 import { tagsCollection } from "../db/typesense/collections/tags-collection.js";
 import { usersCollection } from "../db/typesense/collections/users-collection.js";
 import { typesenseClient } from "../db/typesense/index.js";
@@ -12,17 +13,15 @@ export const initCollections = async () => {
             .collections("users")
             .delete()
             .catch(() => {});
+        await typesenseClient
+            .collections("forms")
+            .delete()
+            .catch(() => {});
         await typesenseClient.collections().create(tagsCollection);
         await typesenseClient.collections().create(usersCollection);
-    } catch (error: any) {
-        if (
-            error.httpStatus === 503 ||
-            error.httpStatus === 404 ||
-            error.message.includes("Not Ready or Lagging") ||
-            error.message.includes("Not Found")
-        ) {
-            await initCollections();
-        }
+        await typesenseClient.collections().create(formsCollection);
+    } catch (error) {
+        await initCollections();
         console.error("Error Init Collection", error);
     }
 };

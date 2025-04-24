@@ -13,12 +13,12 @@ import { QuestionForm } from "../types/question-form.js";
 import { Likes } from "../db/tables/Likes.js";
 
 export class FormService {
-    async delete(data: { id: number }) {
-        return await Forms.destroy({ where: { id: data.id } });
+    async delete(data: { ids: number[] }) {
+        await Forms.destroy({ where: { id: { [Op.in]: data.ids } } });
     }
 
-    async create(data: { id: number }) {
-        return await Forms.create({ ownerId: data.id });
+    async create(data: { ownerId: number }) {
+        return await Forms.create({ ownerId: data.ownerId });
     }
 
     async get(data: { formId: number; userId: number }) {
@@ -31,10 +31,18 @@ export class FormService {
         return this.#convertGet(form, themes, likes, isLikes);
     }
 
+    async update(data: UpdateFormData) {
+        await this.#deleteOldImg(data.formId, data.img);
+        await this.#updateTags(data.tags, data.formId);
+        await this.#updateUsers(data.users, data.formId);
+        await this.#updateQuestions(data);
+        await this.#updateForm(data);
+    }
+
     async #getLikes(formId: number, userId: number) {
         const likes = await Likes.count({ where: { formId } });
-        const isLikes = Boolean(await Likes.findOne({ where: { userId } }));
-        return { likes, isLikes };
+        const isLikes = await Likes.findOne({ where: { userId, formId } });
+        return { likes, isLikes: Boolean(isLikes) };
     }
 
     #convertGet(
@@ -256,13 +264,5 @@ export class FormService {
         Questions.destroy({
             where: { formId, id: { [Op.notIn]: questionsIds } },
         });
-    }
-
-    async update(data: UpdateFormData) {
-        await this.#deleteOldImg(data.formId, data.img);
-        await this.#updateTags(data.tags, data.formId);
-        await this.#updateUsers(data.users, data.formId);
-        await this.#updateQuestions(data);
-        await this.#updateForm(data);
     }
 }

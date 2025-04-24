@@ -1254,6 +1254,6 @@ export const seedDatabase = async () => {
             { formId: 9, userId: 8 },
         ]);
     } catch (error) {
-        throw error;
+        console.error(error)
     }
 };

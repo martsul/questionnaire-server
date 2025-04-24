@@ -7,6 +7,7 @@ export const themeController = async (req: Request, res: Response) => {
         const result = await themeQuery(theme as string);
         res.send(result.map((e) => e.theme));
     } catch (error) {
+        console.error(error)
         res.status(500).send();
     }
 };

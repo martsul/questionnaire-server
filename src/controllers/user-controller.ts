@@ -10,7 +10,7 @@ type UserDocument = {
 };
 
 export const userController = async (
-    req: Request<any, any, any, UserRequestQuery>,
+    req: Request<unknown, unknown, unknown, UserRequestQuery>,
     res: Response
 ) => {
     try {
@@ -26,7 +26,7 @@ export const userController = async (
             })) as SearchResponse<UserDocument>;
         res.send(result.hits?.map(hit => hit.document));
     } catch (error) {
-        res.status(500).send();
         console.error(error);
+        res.status(500).send();
     }
 };

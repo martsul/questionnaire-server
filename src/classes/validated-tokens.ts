@@ -51,6 +51,7 @@ export class ValidatedTokens {
         try {
             this.#saveDataLocal(this.accessToken, this.refreshToken, this.#verifyAccessToken())
         } catch (error) {
+            console.error(error)
             await this.#verifyRefreshToken();
         }
     }
@@ -59,6 +60,7 @@ export class ValidatedTokens {
         try {
             await this.#verifyTokens();
         } catch (error) {
+            console.error(error)
             throw new AuthorizationError();
         }
     }
