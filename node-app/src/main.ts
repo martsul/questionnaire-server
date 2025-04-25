@@ -7,12 +7,10 @@ import { cloudConnect } from "./db/cloud-connect.js";
 import { Server } from "http";
 import { wsInit } from "./ws/index.js";
 import { dbInit } from "./db/db-init.js";
-import { Users } from "./db/tables/Users.js";
-import { where } from "sequelize";
 
 dotenv.config();
 
-const PORT = process.env.SERVER_PORT || 3000;
+const PORT = process.env.PORT || 3000;
 
 const app = express();
 
