@@ -12,7 +12,7 @@ import { where } from "sequelize";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.SERVER_PORT || 3000;
 
 const app = express();
 
