@@ -1,14 +1,14 @@
-version: '3.8'
 services:
   app:
     build:
       context: .
       dockerfile: Dockerfile
     ports:
-      - "3000:3000" 
-      - "8108:8108" 
+      - "3000:3000"
+      - "8108:8108"
     environment:
       - TYPESENSE_API_KEY=your-secret-api-key
+      - PORT=3000
     volumes:
       - typesense-data:/data
     restart: unless-stopped
