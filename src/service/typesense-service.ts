@@ -10,7 +10,7 @@ import { typesenseClient } from "../db/typesense/index.js";
 import { FormDocument } from "../types/form-document.js";
 
 export class TypesenseService {
-    convertForms(forms: Forms[]) {
+    #convertForms(forms: Forms[]) {
         return forms.map((f) => {
             return {
                 id: `${f.id}`,
@@ -75,7 +75,7 @@ export class TypesenseService {
         return {
             tagsDocuments,
             usersDocuments,
-            formsDocuments: this.convertForms(formsDocuments),
+            formsDocuments: this.#convertForms(formsDocuments),
         };
     }
 

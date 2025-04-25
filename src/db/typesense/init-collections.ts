@@ -1,7 +1,7 @@
-import { formsCollection } from "../db/typesense/collections/forms-collections.js";
-import { tagsCollection } from "../db/typesense/collections/tags-collection.js";
-import { usersCollection } from "../db/typesense/collections/users-collection.js";
-import { typesenseClient } from "../db/typesense/index.js";
+import { formsCollection } from "./collections/forms-collections.js";
+import { tagsCollection } from "./collections/tags-collection.js";
+import { usersCollection } from "./collections/users-collection.js";
+import { typesenseClient } from "./index.js";
 
 export const initCollections = async () => {
     try {
