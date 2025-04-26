@@ -31,17 +31,20 @@ services:
     ports:
       - 10000
 
-  - type: private_service
+  - type: web
     name: typesense
     env: docker
     image: typesense/typesense:0.25.2
     plan: free
-    ports:
-      - 8108
     envVars:
       - key: TYPESENSE_API_KEY
         sync: false
       - key: TYPESENSE_DATA_DIR
         value: /data
+    ports:
+      - 8108
     volumes:
       - name: typesense-data
+
+volumes:
+  - name: typesense-data
