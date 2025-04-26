@@ -1,6 +1,6 @@
 services:
   - type: web
-    name: server
+    name: server-with-typesense
     env: docker
     plan: free
     dockerfilePath: Dockerfile
@@ -26,25 +26,6 @@ services:
         sync: false
       - key: TYPESENSE_API_KEY
         sync: false
-      - key: TYPESENSE_HOST
-        sync: false
     ports:
       - 10000
-
-  - type: web
-    name: typesense
-    env: docker
-    image: typesense/typesense:0.25.2
-    plan: free
-    envVars:
-      - key: TYPESENSE_API_KEY
-        sync: false
-      - key: TYPESENSE_DATA_DIR
-        value: /data
-    ports:
       - 8108
-    volumes:
-      - name: typesense-data
-
-volumes:
-  - name: typesense-data
