@@ -8,6 +8,6 @@ export const dbInit = async () => {
     await testBDConnection();
     // await seedDatabase();
     initAssociations();
-    // await initCollections();
-    // await syncTypesense();
+    await initCollections();
+    await syncTypesense();
 };
