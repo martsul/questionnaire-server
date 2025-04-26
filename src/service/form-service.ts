@@ -41,7 +41,9 @@ export class FormService {
 
     async #getLikes(formId: number, userId: number) {
         const likes = await Likes.count({ where: { formId } });
-        const isLikes = await Likes.findOne({ where: { userId, formId } });
+        const isLikes = userId
+            ? await Likes.findOne({ where: { userId, formId } })
+            : false;
         return { likes, isLikes: Boolean(isLikes) };
     }
 

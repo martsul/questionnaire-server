@@ -10,7 +10,7 @@ import { dbInit } from "./db/db-init.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 10000;
 
 const app = express();
 
