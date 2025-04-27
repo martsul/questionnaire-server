@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
+import { Answers } from "../db/tables/Answers.js";
+import { Op } from "sequelize";
 import { ResponseLocals } from "../types/response-locals.js";
 import { AnswerService } from "../service/answer-service.js";
 
-export const deleteAnswerController = async (
-    req: Request<unknown, unknown, { ids: number[] }>,
+type Body = { answerId: number; answers: Record<string, string | string[]> };
+
+export const updateAnswerController = async (
+    req: Request<unknown, unknown, Body>,
     res: Response<unknown, ResponseLocals>
 ) => {
     try {
         const { userId } = res.locals;
-        const answerIds = req.body.ids;
         const answerService = new AnswerService(userId);
-        await answerService.deleteAnswers(answerIds);
+        await answerService.updateAnswer(req.body.answerId, req.body.answers);
         res.send();
     } catch (error) {
-        res.status(500).send();
         console.error(error);
+        res.status(500).send();
     }
 };

@@ -25,8 +25,10 @@ export class WsCommentsService {
 
     message = async (data: string) => {
         const convertData: ClientComment = JSON.parse(data);
-        await Comments.bulkCreate([convertData]);
-        this.#notifyUsers();
+        if (convertData.userId) {
+            await Comments.bulkCreate([convertData]);
+            this.#notifyUsers();
+        }
     };
 
     error = (error: Error) => {

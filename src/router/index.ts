@@ -19,6 +19,7 @@ import { ownFormsController } from "../controllers/own-forms.controller.js";
 import { ownAnswersController } from "../controllers/ownAnswersController.js";
 import { deleteAnswerController } from "../controllers/delete-answer-controller.js";
 import { searchFormController } from "../controllers/search-form-controller.js";
+import { updateAnswerController } from "../controllers/update-answer-controller.js";
 
 export const router = Router();
 
@@ -40,13 +41,13 @@ router.get("/tag", tagController);
 router.get("/theme", themeController);
 router.get("/user", userController);
 router.post("/like", likeController);
-router.get("/answer", getAnswerController);
-router.post("/answer", postAnswerController);
-router.delete("/answer", deleteAnswerController);
+router.get("/answer", authMiddleware, getAnswerController);
+router.post("/answer", authMiddleware, postAnswerController);
+router.put("/answer", authMiddleware, updateAnswerController);
+router.delete("/answer", authMiddleware, deleteAnswerController);
 router.get("/answers", answersController);
 router.get("/statistic", getStatisticController);
 router.get("/home_page", homePageController);
 router.get("/own_forms", ownFormsController);
 router.get("/own_answers", ownAnswersController);
 router.get("/search_form", searchFormController);
-

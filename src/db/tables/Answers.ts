@@ -16,6 +16,7 @@ export class Answers extends Model {
     declare answerCount: number;
     declare inStatistic: boolean;
     declare Question: Questions;
+    declare Form: Forms;
 }
 
 Answers.init(

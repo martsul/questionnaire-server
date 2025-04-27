@@ -12,7 +12,6 @@ const searchFields =
     "title,description,theme,tags,questionTitles,questionDescriptions,questionAnswers,comments";
 
 const find = async (q: string, query_by: string) => {
-    console.log(q, query_by)
     return (await typesenseClient.collections("forms").documents().search({
         q,
         query_by,

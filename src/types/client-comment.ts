@@ -1,5 +1,5 @@
 export type ClientComment = {
     formId: number;
-    userId: number;
+    userId?: number;
     text: string;
 };

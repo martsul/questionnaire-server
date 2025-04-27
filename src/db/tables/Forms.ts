@@ -5,6 +5,7 @@ import { sequelize } from "../index.js";
 import { Questions } from "./Questions.js";
 import { Tags } from "./Tags.js";
 import { Comments } from "./Comments.js";
+import { FormUser } from "./Form-User.js";
 
 export class Forms extends Model {
     declare id: number;
@@ -23,6 +24,7 @@ export class Forms extends Model {
     declare Tags: Tags[];
     declare Questions: Questions[];
     declare Comments: Comments[];
+    declare FormUsers: FormUser[]
 }
 
 Forms.init(

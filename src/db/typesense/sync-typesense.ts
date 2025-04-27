@@ -7,7 +7,6 @@ export const syncTypesense = async () => {
         typesenseService.autoUpdate();
         console.log("Data synced to Typesense");
     } catch (error) {
-        await typesenseService.sync();
         console.error("Typesesnse Sync Error", error);
     }
 };

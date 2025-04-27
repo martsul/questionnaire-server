@@ -111,6 +111,11 @@ Forms.belongsToMany(Users, {
     onDelete: "CASCADE",
 });
 
+Forms.hasMany(FormUser, {
+    foreignKey: "formId",
+    sourceKey: "id"
+})
+
 Tags.belongsToMany(Forms, {
     through: FormTag,
     foreignKey: "tagId",
