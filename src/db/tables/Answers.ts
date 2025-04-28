@@ -12,9 +12,9 @@ export class Answers extends Model {
     declare resultId: number;
     declare createdAt: Date;
     declare formId: number;
+    declare inStatistic: boolean;
     declare User: Users;
     declare answerCount: number;
-    declare inStatistic: boolean;
     declare Question: Questions;
     declare Form: Forms;
 }

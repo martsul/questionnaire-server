@@ -17,6 +17,15 @@ type ConvertedPostData = {
     inStatistic: boolean;
 };
 
+type convertUpdateAnswers = {
+    userId: number;
+    questionId: string;
+    answer: string;
+    resultId: number;
+    createdAt: Date;
+    formId: number;
+};
+
 export class AnswerService {
     #userId: number;
 
@@ -51,6 +60,8 @@ export class AnswerService {
 
     async #updateAnswer(answerId: number, answers: requestAnswers) {
         const answerInfo = await this.#findAnswerInfo(answerId);
+        await this.#deleteOldAnswers(answerId);
+        await this.#createNewAnswers(answerId, answers, answerInfo);
     }
 
     async #checkGetPass(resultId: number) {
@@ -62,6 +73,23 @@ export class AnswerService {
             canGet: isOwnerForm || isOwnerAnswer || isAdmin,
             isAllAnswers: isAdmin || isOwnerAnswer,
         };
+    }
+
+    async #createNewAnswers(
+        resultId: number,
+        answers: requestAnswers,
+        answerDetails: Answers
+    ) {
+        const convertedAnswers = this.#convertUpdateAnswers(
+            resultId,
+            answers,
+            answerDetails
+        );
+        await Answers.bulkCreate(convertedAnswers);
+    }
+
+    async #deleteOldAnswers(resultId: number) {
+        await Answers.destroy({ where: { resultId } });
     }
 
     async #postAnswer(answers: requestAnswers, formId: number) {
@@ -139,6 +167,55 @@ export class AnswerService {
         return form.ownerId === this.#userId;
     }
 
+    #convertUpdateAnswers(
+        resultId: number,
+        answers: requestAnswers,
+        answerDetails: Answers
+    ) {
+        const convertedAnswers: convertUpdateAnswers[] = [];
+        Object.keys(answers).forEach((questionId) => {
+            if (Array.isArray(answers[questionId])) {
+                answers[questionId].forEach((a) => {
+                    convertedAnswers.push(
+                        this.#convertUpdateAnswer(
+                            resultId,
+                            a,
+                            answerDetails,
+                            questionId
+                        )
+                    );
+                });
+            } else {
+                convertedAnswers.push(
+                    this.#convertUpdateAnswer(
+                        resultId,
+                        answers[questionId],
+                        answerDetails,
+                        questionId
+                    )
+                );
+            }
+        });
+        return convertedAnswers;
+    }
+
+    #convertUpdateAnswer(
+        resultId: number,
+        answer: string,
+        answerDetails: Answers,
+        questionId: string
+    ) {
+        return {
+            userId: this.#userId,
+            questionId,
+            answer,
+            resultId,
+            createdAt: answerDetails.createdAt,
+            formId: answerDetails.formId,
+            inStatistic: answerDetails.inStatistic
+        } as convertUpdateAnswers;
+    }
+
     async #convertPostData(
         answers: requestAnswers,
         formId: number,
@@ -212,7 +289,7 @@ export class AnswerService {
     async #findAnswerInfo(resultId: number) {
         const answer = await Answers.findOne({
             where: { resultId },
-            attributes: ["createdAt", "formId"],
+            attributes: ["createdAt", "formId", "inStatistic"],
         });
         if (!answer) throw new Error("There is no such Answer");
         return answer;
