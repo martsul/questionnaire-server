@@ -30,7 +30,6 @@ export class HomePageService {
 
     async #getLastForms() {
         return await Forms.findAll({
-            where: { isPublic: true },
             attributes: [
                 "id",
                 "img",
@@ -52,7 +51,6 @@ export class HomePageService {
 
     async #getPopularForm() {
         return await Forms.findAll({
-            where: { isPublic: true },
             attributes: [
                 "id",
                 "title",

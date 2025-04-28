@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { ResponseLocals } from "../types/response-locals.js";
-import { AnswerService } from "../service/answer-service.js";
+import { ResponseLocals } from "../../types/response-locals.js";
+import { AnswerService } from "../../service/answer-service.js";
 
 export const getAnswerController = async (
     req: Request<unknown, unknown, unknown, { answerId: number }>,

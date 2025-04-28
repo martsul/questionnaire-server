@@ -13,12 +13,22 @@ import { QuestionForm } from "../types/question-form.js";
 import { Likes } from "../db/tables/Likes.js";
 
 export class FormService {
+    #userId: number;
+
+    constructor(userId: number) {
+        this.#userId = userId;
+    }
+
     async delete(data: { ids: number[] }) {
+        const canDelete = await this.#checkDeletePass(data.ids);
+        if (!canDelete) {
+            throw new Error("Delete Form Error. User has no rights");
+        }
         await Forms.destroy({ where: { id: { [Op.in]: data.ids } } });
     }
 
-    async create(data: { ownerId: number }) {
-        return await Forms.create({ ownerId: data.ownerId });
+    async create() {
+        return await Forms.create({ ownerId: this.#userId });
     }
 
     async get(data: { formId: number; userId: number }) {
@@ -32,11 +42,43 @@ export class FormService {
     }
 
     async update(data: UpdateFormData) {
+        const canUpdate: boolean = await this.#checkUpdatePass(data.formId);
+        if (!canUpdate)
+            throw new Error("Update Form Error. User has no Rights.");
+        await this.#update(data);
+    }
+
+    async #update(data: UpdateFormData) {
         await this.#deleteOldImg(data.formId, data.img);
         await this.#updateTags(data.tags, data.formId);
         await this.#updateUsers(data.users, data.formId);
         await this.#updateQuestions(data);
         await this.#updateForm(data);
+    }
+
+    async #checkUpdatePass(formId: number) {
+        const isAdmin = await this.#checkIsAdmin();
+        const isOwner = await this.#checkIsOwnerForms([formId]);
+        return isAdmin || isOwner;
+    }
+
+    async #checkDeletePass(formIds: number[]): Promise<boolean> {
+        const isAdmin = await this.#checkIsAdmin();
+        if (isAdmin) return true;
+        return await this.#checkIsOwnerForms(formIds);
+    }
+
+    async #checkIsOwnerForms(formIds: number[]) {
+        const forms = await Forms.findAll({
+            where: { ownerId: this.#userId, id: { [Op.in]: formIds } },
+        });
+        return forms.length === formIds.length;
+    }
+
+    async #checkIsAdmin() {
+        const user = await Users.findOne({ where: { id: this.#userId } });
+        if (!user) throw new Error("No Such User");
+        return user.isAdmin;
     }
 
     async #getLikes(formId: number, userId: number) {

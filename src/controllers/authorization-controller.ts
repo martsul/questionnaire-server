@@ -16,8 +16,8 @@ export const authorizationController = (action: AuthorizationMethods) => {
             });
             res.json(receivedData);
         } catch (error) {
-            console.error(error)
-            res.status(404).send(getErrorMessage(error))
+            console.error("Auth Error:", error);
+            res.status(404).send(getErrorMessage(error));
         }
     };
 };

@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { AnswerRequestBody } from "../types/answer-request-body.js";
-import { ResponseLocals } from "../types/response-locals.js";
-import { AnswerService } from "../service/answer-service.js";
+import { AnswerRequestBody } from "../../types/answer-request-body.js"; 
+import { ResponseLocals } from "../../types/response-locals.js"; 
+import { AnswerService } from "../../service/answer-service.js"; 
 
 export const postAnswerController = async (
     req: Request<unknown, unknown, AnswerRequestBody>,

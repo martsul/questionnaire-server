@@ -26,7 +26,7 @@ export const userController = async (
             })) as SearchResponse<UserDocument>;
         res.send(result.hits?.map(hit => hit.document));
     } catch (error) {
-        console.error(error);
+        console.error("Get Users Error:", error);
         res.status(500).send();
     }
 };

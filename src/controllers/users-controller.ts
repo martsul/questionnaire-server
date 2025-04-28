@@ -28,7 +28,7 @@ export const usersController = (operation: ManagementUsersOperations) => {
             const users = await new UsersService(id)[operation](req.body);
             res.json(users);
         } catch (error) {
-            console.error(error);
+            console.error("Users Error:", error);
             handlerError(error, res);
         }
     };

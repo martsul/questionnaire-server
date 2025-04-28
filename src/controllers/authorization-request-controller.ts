@@ -24,7 +24,7 @@ export const authorizationRequestController = async (
         if (user.isBlocked) throw new AuthorizationError();
         res.send(user);
     } catch (error) {
-        console.error(error)
+        console.error("Auth Request Controller:", error);
         res.status(401).send();
     }
 };

@@ -1,8 +1,6 @@
 import { Request, Response } from "express";
-import { Answers } from "../db/tables/Answers.js";
-import { Op } from "sequelize";
-import { ResponseLocals } from "../types/response-locals.js";
-import { AnswerService } from "../service/answer-service.js";
+import { AnswerService } from "../../service/answer-service.js";
+import { ResponseLocals } from "../../types/response-locals.js";
 
 type Body = { answerId: number; answers: Record<string, string | string[]> };
 
