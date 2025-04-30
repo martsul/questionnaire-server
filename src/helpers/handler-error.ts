@@ -1,9 +1,9 @@
 import { Response } from "express";
-import { AuthorizationError } from "../errors/authorization-error.js";
+import { getStatusCode } from "./get-status-code.js";
+import { getErrorMessage } from "./get-error-message.js";
 
 export const handlerError = (error: unknown, res: Response) => {
-    if (error instanceof AuthorizationError) {
-        res.status(401).send("Unauthorized")
-    }
-    res.status(400).send()
+    const message = getErrorMessage(error);
+    const status = getStatusCode(message);
+    res.status(status).send(message);
 };

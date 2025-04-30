@@ -5,6 +5,7 @@ import { FormUser } from "../db/tables/Form-User.js";
 import { Forms } from "../db/tables/Forms.js";
 import { Questions } from "../db/tables/Questions.js";
 import { Users } from "../db/tables/Users.js";
+import { RightsError } from "../errors/rights-error.js";
 
 type requestAnswers = Record<string, string | string[]>;
 
@@ -35,26 +36,26 @@ export class AnswerService {
 
     async getAnswer(resultId: number) {
         const { isAllAnswers, canGet } = await this.#checkGetPass(resultId);
-        if (!canGet) throw new Error("No Access to Get Answer");
+        if (!canGet) throw new RightsError();
         const answers = await this.#queryAnswers(isAllAnswers, resultId);
         return this.#formatAnswers(answers);
     }
 
     async postAnswer(answers: requestAnswers, formId: number) {
         const canPost: boolean = await this.#checkPostPass(formId);
-        if (!canPost) throw new Error("No Access to Post Answer");
+        if (!canPost) throw new RightsError();
         await this.#postAnswer(answers, formId);
     }
 
     async deleteAnswers(answerIds: number[]) {
         const canDelete: boolean = await this.#checkChangePass(answerIds);
-        if (!canDelete) throw new Error("No Access to Delete Answers");
+        if (!canDelete) throw new RightsError();
         await Answers.destroy({ where: { resultId: { [Op.in]: answerIds } } });
     }
 
     async updateAnswer(answerId: number, answers: requestAnswers) {
         const canUpdate: boolean = await this.#checkChangePass([answerId]);
-        if (!canUpdate) throw new Error("No Access to Update Answers");
+        if (!canUpdate) throw new RightsError();
         await this.#updateAnswer(answerId, answers);
     }
 
@@ -212,7 +213,7 @@ export class AnswerService {
             resultId,
             createdAt: answerDetails.createdAt,
             formId: answerDetails.formId,
-            inStatistic: answerDetails.inStatistic
+            inStatistic: answerDetails.inStatistic,
         } as convertUpdateAnswers;
     }
 

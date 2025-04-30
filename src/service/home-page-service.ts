@@ -37,7 +37,7 @@ export class HomePageService {
                 "description",
                 [Sequelize.col("owner.name"), "creator"],
             ],
-            order: [["createdAt", "ASC"]],
+            order: [["createdAt", "DESC"]],
             limit: 10,
             include: [
                 {

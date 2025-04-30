@@ -11,6 +11,8 @@ import { FormUser } from "../db/tables/Form-User.js";
 import { Questions } from "../db/tables/Questions.js";
 import { QuestionForm } from "../types/question-form.js";
 import { Likes } from "../db/tables/Likes.js";
+import { RightsError } from "../errors/rights-error.js";
+import { UnknownUserError } from "../errors/unknown-user-error.js";
 
 export class FormService {
     #userId: number;
@@ -22,7 +24,7 @@ export class FormService {
     async delete(data: { ids: number[] }) {
         const canDelete = await this.#checkDeletePass(data.ids);
         if (!canDelete) {
-            throw new Error("Delete Form Error. User has no rights");
+            throw new RightsError();
         }
         await Forms.destroy({ where: { id: { [Op.in]: data.ids } } });
     }
@@ -44,7 +46,7 @@ export class FormService {
     async update(data: UpdateFormData) {
         const canUpdate: boolean = await this.#checkUpdatePass(data.formId);
         if (!canUpdate)
-            throw new Error("Update Form Error. User has no Rights.");
+            throw new RightsError();
         await this.#update(data);
     }
 
@@ -77,7 +79,7 @@ export class FormService {
 
     async #checkIsAdmin() {
         const user = await Users.findOne({ where: { id: this.#userId } });
-        if (!user) throw new Error("No Such User");
+        if (!user) throw new UnknownUserError();
         return user.isAdmin;
     }
 

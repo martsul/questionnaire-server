@@ -3,6 +3,7 @@ import { Answers } from "../db/tables/Answers.js";
 import { Forms } from "../db/tables/Forms.js";
 import { Users } from "../db/tables/Users.js";
 import { Questions } from "../db/tables/Questions.js";
+import { RightsError } from "../errors/rights-error.js";
 
 export class StatisticService {
     #userId: number;
@@ -15,7 +16,7 @@ export class StatisticService {
 
     async getStatistic() {
         const canGet: boolean = await this.#checkGetPass();
-        if (!canGet) throw new Error("User Has No Rights");
+        if (!canGet) throw new RightsError();
         return await this.#getStatistic();
     }
 

@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ResponseLocals } from "../types/response-locals.js";
 import { StatisticService } from "../service/statistic-service.js";
+import { handlerError } from "../helpers/handler-error.js";
 
 type RequestQuery = { formId: number };
 
@@ -16,6 +17,6 @@ export const statisticController = async (
         res.send(statistic);
     } catch (error) {
         console.error(error);
-        res.status(500).send;
+        handlerError(error, res)
     }
 };

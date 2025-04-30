@@ -43,29 +43,19 @@ export class AuthorizationService {
     }
 
     async signin() {
-        const result = await this.#findUser();
-        await this.#validatePassword(result.password);
-        this.#checkBlock(Boolean(result.isBlocked));
-        return {
-            id: result.id,
-            name: result.name,
-            isAdmin: Boolean(result.isAdmin),
-            email: result.email,
-        };
+        const user = await this.#findUser();
+        await this.#validatePassword(user.password);
+        this.#checkBlock(Boolean(user.isBlocked));
+        return user
     }
 
     async signup() {
         await this.#hashingPassword();
-        const result = await Users.create({
+        const user = await Users.create({
             name: this.#name,
             password: this.#password,
             email: this.#email,
         });
-        return {
-            id: result.id,
-            name: result.name,
-            isAdmin: Boolean(result.isAdmin),
-            email: result.email,
-        };
+        return user
     }
 }

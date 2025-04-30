@@ -1,36 +1,55 @@
 import { Op } from "sequelize";
 import { Users } from "../db/tables/Users.js";
-import { Forms } from "../db/tables/Forms.js";
+import { RightsError } from "../errors/rights-error.js";
 
 export class UsersService {
-    #id: number;
+    #userId: number;
 
-    constructor(id: number) {
-        this.#id = id;
+    constructor(userId: number) {
+        this.#userId = userId;
     }
 
     async getUsers() {
-        const users = await this.#queryUsers();
-        const { isAdmin, isBlocked } = users.find(
-            (user) => user.id === this.#id
-        )?.dataValues || { isAdmin: false, isBlocked: false };
-        return {
-            users,
-            status: {
-                isAdmin,
-                isBlocked,
-            },
-        };
+        await this.#checkIsAdmin();
+        const users = await this.#get();
+        return users;
     }
 
-    async #queryUsers() {
+    async block(ids: number[]) {
+        await this.#checkIsAdmin();
+        await this.#block(ids);
+    }
+
+    async unblock(ids: number[]) {
+        await this.#checkIsAdmin();
+        await this.#unblock(ids);
+    }
+
+    async giveAdmin(ids: number[]) {
+        await this.#checkIsAdmin();
+        await this.#giveAdmin(ids);
+    }
+
+    async takeAdmin(ids: number[]) {
+        await this.#checkIsAdmin();
+        await this.#takeAdmin(ids);
+    }
+
+    async #checkIsAdmin() {
+        const user = await Users.findOne({ where: { id: this.#userId } });
+        if (!user?.isAdmin) {
+            throw new RightsError();
+        }
+    }
+
+    async #get() {
         return await Users.findAll({
             attributes: ["id", "name", "isAdmin", "isBlocked"],
             order: ["id"],
         });
     }
 
-    async block(ids: number[]) {
+    async #block(ids: number[]) {
         await Users.update(
             { isBlocked: true },
             {
@@ -41,12 +60,11 @@ export class UsersService {
                 },
             }
         );
-        return await this.getUsers();
     }
 
-    async unblock(ids: number[]) {
+    async #unblock(ids: number[]) {
         await Users.update(
-            { isBlocked: false },
+            { isBlocked: true },
             {
                 where: {
                     id: {
@@ -55,10 +73,9 @@ export class UsersService {
                 },
             }
         );
-        return await this.getUsers();
     }
 
-    async giveAdmin(ids: number[]) {
+    async #giveAdmin(ids: number[]) {
         await Users.update(
             { isAdmin: true },
             {
@@ -69,10 +86,9 @@ export class UsersService {
                 },
             }
         );
-        return await this.getUsers();
     }
 
-    async takeAdmin(ids: number[]) {
+    async #takeAdmin(ids: number[]) {
         await Users.update(
             { isAdmin: false },
             {
@@ -83,6 +99,5 @@ export class UsersService {
                 },
             }
         );
-        return await this.getUsers();
     }
 }

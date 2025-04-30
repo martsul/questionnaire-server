@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { ResponseLocals } from "../types/response-locals.js";
 import { AnswersService } from "../service/answers-service.js";
+import { handlerError } from "../helpers/handler-error.js";
 
 export const answersController = async (
     req: Request<unknown, unknown, unknown, { formId: number }>,
@@ -14,6 +15,6 @@ export const answersController = async (
         res.send(answers);
     } catch (error) {
         console.error("Answers Error:", error);
-        res.status(500).send();
+        handlerError(error, res);
     }
 };

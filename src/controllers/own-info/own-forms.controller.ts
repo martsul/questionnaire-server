@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
-import { Forms } from "../../db/tables/Forms.js";
 import { ResponseLocals } from "../../types/response-locals.js";
 import { OwnService } from "../../service/own-serivce.js";
+import { handlerError } from "../../helpers/handler-error.js";
 
 export const ownFormsController = async (
     req: Request,
@@ -14,6 +14,6 @@ export const ownFormsController = async (
         res.send(forms);
     } catch (error) {
         console.error(error);
-        res.status(500).send();
+        handlerError(error,res)
     }
 };

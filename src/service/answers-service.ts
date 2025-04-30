@@ -1,6 +1,7 @@
 import { Answers } from "../db/tables/Answers.js";
 import { Forms } from "../db/tables/Forms.js";
 import { Users } from "../db/tables/Users.js";
+import { RightsError } from "../errors/rights-error.js";
 
 export class AnswersService {
     #userId: number;
@@ -13,7 +14,7 @@ export class AnswersService {
 
     async getAnswers() {
         const canGet: boolean = await this.#checkGetPass();
-        if (!canGet) throw new Error("User Has No Rights");
+        if (!canGet) throw new RightsError();
         const answers = await this.#getAnswers();
         return this.#convertAnswers(answers);
     }
@@ -44,8 +45,8 @@ export class AnswersService {
     }
 
     async #checkGetPass() {
-        const isAdmin = this.#checkIsAdmin();
-        const isOwner = this.#checkIsOwner();
+        const isAdmin = await this.#checkIsAdmin();
+        const isOwner = await this.#checkIsOwner();
         return isAdmin || isOwner;
     }
 
