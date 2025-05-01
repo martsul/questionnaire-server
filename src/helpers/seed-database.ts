@@ -32,6 +32,7 @@ export const seedDatabase = async () => {
             { theme: "Entertainment" },
             { theme: "Environment" },
             { theme: "Business" },
+            { theme: "Other" },
         ]);
 
         await Users.bulkCreate([

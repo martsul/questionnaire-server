@@ -35,6 +35,7 @@ router.post("/block", authMiddleware, usersController("block"));
 router.post("/unblock", authMiddleware, usersController("unblock"));
 router.post("/give_admin", authMiddleware, usersController("giveAdmin"));
 router.post("/take_admin", authMiddleware, usersController("takeAdmin"));
+router.post("/delete_users", authMiddleware, usersController("deleteUsers"));
 router.get("/form", getFormController);
 router.post("/form", authMiddleware, postFormController);
 router.put("/form", authMiddleware, updateFormController);

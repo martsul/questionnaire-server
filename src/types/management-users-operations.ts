@@ -3,4 +3,5 @@ export type ManagementUsersOperations =
     | "unblock"
     | "giveAdmin"
     | "takeAdmin"
-    | "getUsers";
+    | "getUsers"
+    | "deleteUsers";

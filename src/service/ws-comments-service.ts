@@ -3,6 +3,8 @@ import { CustomWebSocket } from "../types/custom-websoket.js";
 import { Comments } from "../db/tables/Comments.js";
 import { ClientComment } from "../types/client-comment.js";
 import { Users } from "../db/tables/Users.js";
+import { UnknownUserError } from "../errors/unknown-user-error.js";
+import { BlockUserError } from "../errors/block-user-error.js";
 
 const commentsConnections = new Map<string, Set<CustomWebSocket>>();
 
@@ -24,10 +26,15 @@ export class WsCommentsService {
     };
 
     message = async (data: string) => {
-        const convertData: ClientComment = JSON.parse(data);
-        if (convertData.userId) {
-            await Comments.bulkCreate([convertData]);
-            this.#notifyUsers();
+        try {
+            const convertData: ClientComment = JSON.parse(data);
+            if (convertData.userId) {
+                await this.#checkUser(convertData.userId);
+                await Comments.bulkCreate([convertData]);
+                this.#notifyUsers();
+            }
+        } catch (error) {
+            console.error("Ws Message Error:", error);
         }
     };
 
@@ -39,6 +46,16 @@ export class WsCommentsService {
         commentsConnections.get(this.#formId)!.delete(this.#ws);
         console.log("Connection Close");
     };
+
+    async #checkUser(id: number) {
+        const user = await this.#findUser(id);
+        if (!user) throw new UnknownUserError();
+        if (user.isBlocked) throw new BlockUserError();
+    }
+
+    async #findUser(id: number) {
+        return await Users.findOne({ where: { id } });
+    }
 
     async #notifyUsers() {
         const noDuplicateUsers = commentsConnections.get(this.#formId);

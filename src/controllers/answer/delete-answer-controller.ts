@@ -11,7 +11,7 @@ export const deleteAnswerController = async (
         const answerIds = req.body.ids;
         const answerService = new AnswerService(userId);
         await answerService.deleteAnswers(answerIds);
-        res.send();
+        res.send("ok");
     } catch (error) {
         res.status(500).send();
         console.error(error);

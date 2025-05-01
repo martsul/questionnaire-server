@@ -26,7 +26,10 @@ export class FormService {
         if (!canDelete) {
             throw new RightsError();
         }
-        await Forms.destroy({ where: { id: { [Op.in]: data.ids } } });
+        await Forms.destroy({
+            where: { id: { [Op.in]: data.ids } },
+            individualHooks: true,
+        });
     }
 
     async create() {
@@ -45,8 +48,7 @@ export class FormService {
 
     async update(data: UpdateFormData) {
         const canUpdate: boolean = await this.#checkUpdatePass(data.formId);
-        if (!canUpdate)
-            throw new RightsError();
+        if (!canUpdate) throw new RightsError();
         await this.#update(data);
     }
 

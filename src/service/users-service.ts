@@ -35,11 +35,23 @@ export class UsersService {
         await this.#takeAdmin(ids);
     }
 
+    async deleteUsers(ids: number[]) {
+        await this.#checkIsAdmin();
+        await this.#deleteUsers(ids);
+    }
+
     async #checkIsAdmin() {
         const user = await Users.findOne({ where: { id: this.#userId } });
         if (!user?.isAdmin) {
             throw new RightsError();
         }
+    }
+
+    async #deleteUsers(ids: number[]) {
+        await Users.destroy({
+            where: { id: { [Op.in]: ids } },
+            individualHooks: true,
+        });
     }
 
     async #get() {
@@ -64,7 +76,7 @@ export class UsersService {
 
     async #unblock(ids: number[]) {
         await Users.update(
-            { isBlocked: true },
+            { isBlocked: false },
             {
                 where: {
                     id: {

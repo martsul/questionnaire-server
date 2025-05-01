@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { AuthorizationMethods } from "../types/authorization-methods.js";
-import { handlerAuthorizationAction } from "../helpers/authorization/handler-authorization-action.js";
 import { getErrorMessage } from "../helpers/get-error-message.js";
 import { AuthorizationService } from "../service/authorization-service.js";
 import { AuthorizationBody } from "../types/authorization-body.js";
@@ -32,7 +31,7 @@ export const authorizationController = (action: AuthorizationMethods) => {
             });
             res.json(convertUserData(userData, tokens.accessToken));
         } catch (error) {
-            // console.error("Auth Error:", error);
+            console.error("Auth Error:", error);
             res.status(400).send(getErrorMessage(error));
         }
     };
