@@ -22,6 +22,9 @@ import { getFormController } from "../controllers/form/get-form-controller.js";
 import { updateFormController } from "../controllers/form/update-form-controller.js";
 import { deleteFormController } from "../controllers/form/delete-form-controller.js";
 import { postFormController } from "../controllers/form/post-form-controller.js";
+import { githubAuthController } from "../controllers/github/github-auth-controller.js";
+import { githubCallbackController } from "../controllers/github/github-callback-controller.js";
+import { githubTokensController } from "../controllers/github/github-tokens-controller.js";
 
 export const router = Router();
 
@@ -53,3 +56,6 @@ router.get("/home_page", homePageController);
 router.get("/own_forms", authMiddleware, ownFormsController);
 router.get("/own_answers", authMiddleware, ownAnswersController);
 router.get("/search_form", searchFormController);
+router.get("/auth/github", githubAuthController);
+router.get("/auth/github/callback", githubCallbackController);
+router.get("/auth/github/tokens", githubTokensController);

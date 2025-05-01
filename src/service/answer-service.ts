@@ -6,6 +6,10 @@ import { Forms } from "../db/tables/Forms.js";
 import { Questions } from "../db/tables/Questions.js";
 import { Users } from "../db/tables/Users.js";
 import { RightsError } from "../errors/rights-error.js";
+import { UnknownUserError } from "../errors/unknown-user-error.js";
+import { transporter } from "../mailer/index.js";
+import { config } from "dotenv";
+config();
 
 type requestAnswers = Record<string, string | string[]>;
 
@@ -41,10 +45,15 @@ export class AnswerService {
         return this.#formatAnswers(answers);
     }
 
-    async postAnswer(answers: requestAnswers, formId: number) {
+    async postAnswer(
+        answers: requestAnswers,
+        formId: number,
+        answerOnEmail: boolean
+    ) {
         const canPost: boolean = await this.#checkPostPass(formId);
         if (!canPost) throw new RightsError();
         await this.#postAnswer(answers, formId);
+        if (answerOnEmail) this.#sendAnswers(answers);
     }
 
     async deleteAnswers(answerIds: number[]) {
@@ -57,6 +66,56 @@ export class AnswerService {
         const canUpdate: boolean = await this.#checkChangePass([answerId]);
         if (!canUpdate) throw new RightsError();
         await this.#updateAnswer(answerId, answers);
+    }
+
+    async #sendAnswers(answers: requestAnswers) {
+        const email = await this.#getEmail();
+        const questions = await this.#getQuestions(Object.keys(answers));
+        const convertedAnswers = this.#convertAnswerToEmail(answers, questions);
+        await this.#send(email, convertedAnswers);
+    }
+
+    async #getQuestions(questionIds: string[]) {
+        return await Questions.findAll({
+            where: { id: { [Op.in]: questionIds } },
+            attributes: ["title", "id"],
+        });
+    }
+
+    async #send(to: string, text: string) {
+        try {
+            const info = await transporter.sendMail({
+                from: `"Quiz App" <${process.env.MAILER_EMAIL}>`,
+                to,
+                text,
+            });
+            console.log(`Email was sended ${info}`);
+        } catch (error) {
+            console.error("Send Email Error:", error);
+        }
+    }
+
+    #convertAnswerToEmail(answers: requestAnswers, questions: Questions[]) {
+        const convertedAnswers: string[] = [];
+        for (const key in answers) {
+            const questionTitle = questions.find((q) => q.id === key)?.title;
+            const answer = Array.isArray(answers[key])
+                ? answers[key].join(", ")
+                : answers[key];
+            convertedAnswers.push(`${questionTitle}: ${answer};`);
+        }
+        return convertedAnswers.join("\n");
+    }
+
+    async #getEmail() {
+        const user = await Users.findOne({
+            where: { id: this.#userId },
+            attributes: ["email"],
+        });
+        if (!user) {
+            throw new UnknownUserError();
+        }
+        return user.email;
     }
 
     async #updateAnswer(answerId: number, answers: requestAnswers) {

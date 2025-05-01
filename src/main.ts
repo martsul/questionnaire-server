@@ -7,6 +7,7 @@ import { cloudConnect } from "./db/cloud-connect.js";
 import { Server } from "http";
 import { wsInit } from "./ws/index.js";
 import { dbInit } from "./db/db-init.js";
+import { Users } from "./db/tables/Users.js";
 
 dotenv.config();
 

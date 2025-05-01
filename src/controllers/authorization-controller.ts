@@ -5,16 +5,9 @@ import { AuthorizationService } from "../service/authorization-service.js";
 import { AuthorizationBody } from "../types/authorization-body.js";
 import { TokensService } from "../service/tokens-service.js";
 import { Users } from "../db/tables/Users.js";
+import { convertUserData } from "./convert-user-data.js";
 
-const convertUserData = (user: Users, accessTokens: string) => {
-    return {
-        name: user.name,
-        email: user.email,
-        id: user.id,
-        isAdmin: user.isAdmin,
-        accessTokens,
-    };
-};
+
 
 export const authorizationController = (action: AuthorizationMethods) => {
     return async (

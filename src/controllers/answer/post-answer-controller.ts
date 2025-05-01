@@ -12,7 +12,8 @@ export const postAnswerController = async (
         const answerService = new AnswerService(userId);
         await answerService.postAnswer(
             req.body.answers,
-            req.body.formId
+            req.body.formId,
+            req.body.answerOnEmail
         );
         res.send();
     } catch (error) {
