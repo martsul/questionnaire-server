@@ -7,7 +7,6 @@ import { Themes } from "../db/tables/Themes.js";
 import { Users } from "../db/tables/Users.js";
 import { typesenseClient } from "../db/typesense/index.js";
 import { FormDocument } from "../types/form-document.js";
-import { error } from "console";
 
 export class TypesenseService {
     #convertForms(forms: Forms[]) {
@@ -220,10 +219,34 @@ export class TypesenseService {
         });
     }
 
+    #cascadeFormUsersDestroy() {
+        Users.beforeDestroy(async (user) => {
+            const forms = await this.#findUsersForms(user.id);
+            this.#deleteForms(forms);
+        });
+    }
+
+    async #findUsersForms(ownerId: number) {
+        return await Forms.findAll({ where: { ownerId } });
+    }
+
+    #deleteForms(forms: Forms[]) {
+        forms.forEach((form) => {
+            typesenseClient
+                .collections("forms")
+                .documents(`${form.id}`)
+                .delete()
+                .catch((e) => {
+                    console.error("Cascade Delete Forms Error:", e);
+                });
+        });
+    }
+
     #formsAutoUpdate() {
         this.#formsCreate();
         this.#formsUpdate();
         this.#formsDestroy();
+        this.#cascadeFormUsersDestroy();
     }
 
     autoUpdate() {

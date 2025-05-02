@@ -12,7 +12,7 @@ export const refreshController = async (req: Request, res: Response) => {
             req.cookies.refreshToken,
             process.env.JWT_REFRESH_SECRET
         );
-        const user = await new User(id).getUser()
+        const user = await new User(id).getUser();
         const tokens = new TokensService(user);
         await tokens.save();
         res.cookie("refreshToken", tokens.refreshToken, {
