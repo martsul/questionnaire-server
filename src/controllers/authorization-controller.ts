@@ -4,7 +4,6 @@ import { getErrorMessage } from "../helpers/get-error-message.js";
 import { AuthorizationService } from "../service/authorization-service.js";
 import { AuthorizationBody } from "../types/authorization-body.js";
 import { TokensService } from "../service/tokens-service.js";
-import { Users } from "../db/tables/Users.js";
 import { convertUserData } from "./convert-user-data.js";
 
 export const authorizationController = (action: AuthorizationMethods) => {

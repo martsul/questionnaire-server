@@ -266,7 +266,7 @@ export class AnswerService {
         questionId: string
     ) {
         return {
-            userId: this.#userId,
+            userId: answerDetails.userId,
             questionId,
             answer,
             resultId,
@@ -349,7 +349,7 @@ export class AnswerService {
     async #findAnswerInfo(resultId: number) {
         const answer = await Answers.findOne({
             where: { resultId },
-            attributes: ["createdAt", "formId", "inStatistic"],
+            attributes: ["createdAt", "formId", "inStatistic", "userId"],
         });
         if (!answer) throw new Error("There is no such Answer");
         return answer;
