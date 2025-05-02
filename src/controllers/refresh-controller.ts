@@ -18,8 +18,10 @@ export const refreshController = async (req: Request, res: Response) => {
         res.cookie("refreshToken", tokens.refreshToken, {
             maxAge: 2592000000,
             httpOnly: true,
+            secure: true,
+            sameSite: "none",
         });
-        res.json(tokens.accessToken);
+        res.send(tokens.accessToken);
     } catch (error) {
         console.error("Refresh Error:", error);
         res.status(401).send("Unauthorized");

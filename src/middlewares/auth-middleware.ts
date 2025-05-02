@@ -22,6 +22,3 @@ export const authMiddleware = async (
         handlerError(error, res);
     }
 };
-// update users set is_admin = true, is_blocked = false where "name" = 'user';
-// update users set is_admin = false where "name" = 'user';
-// update users set is_blocked = true where "name" = 'user';

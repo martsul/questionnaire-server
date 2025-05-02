@@ -16,6 +16,8 @@ export const githubTokensController = async (
     res.cookie("refreshToken", tokens.refreshToken, {
         maxAge: 2592000000,
         httpOnly: true,
+        secure: true,
+        sameSite: "none",
     });
     res.send(tokens.accessToken);
     try {
