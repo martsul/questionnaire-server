@@ -119,9 +119,9 @@ export class AnswerService {
     }
 
     async #updateAnswer(answerId: number, answers: requestAnswers) {
-        const answerInfo = await this.#findAnswerInfo(answerId);
+        const answersDetails = await this.#findAnswerDetails(answerId);
         await this.#deleteOldAnswers(answerId);
-        await this.#createNewAnswers(answerId, answers, answerInfo);
+        await this.#createNewAnswers(answerId, answers, answersDetails);
     }
 
     async #checkGetPass(resultId: number) {
@@ -138,7 +138,7 @@ export class AnswerService {
     async #createNewAnswers(
         resultId: number,
         answers: requestAnswers,
-        answerDetails: Answers
+        answerDetails: Answers[]
     ) {
         const convertedAnswers = this.#convertUpdateAnswers(
             resultId,
@@ -230,33 +230,68 @@ export class AnswerService {
     #convertUpdateAnswers(
         resultId: number,
         answers: requestAnswers,
-        answerDetails: Answers
+        answersDetails: Answers[]
     ) {
         const convertedAnswers: convertUpdateAnswers[] = [];
         Object.keys(answers).forEach((questionId) => {
-            if (Array.isArray(answers[questionId])) {
-                answers[questionId].forEach((a) => {
-                    convertedAnswers.push(
-                        this.#convertUpdateAnswer(
-                            resultId,
-                            a,
-                            answerDetails,
-                            questionId
-                        )
-                    );
-                });
-            } else {
-                convertedAnswers.push(
-                    this.#convertUpdateAnswer(
-                        resultId,
-                        answers[questionId],
-                        answerDetails,
-                        questionId
-                    )
-                );
-            }
+            const answerDetails = answersDetails.find(
+                (a) => a.questionId === questionId
+            ) as Answers;
+            this.#handlerConvertUpdateAnswer(
+                answers[questionId],
+                answerDetails,
+                convertedAnswers,
+                resultId,
+                questionId
+            );
         });
         return convertedAnswers;
+    }
+
+    #handlerConvertUpdateAnswer(
+        answer: string | string[],
+        answerDetails: Answers,
+        convertedAnswers: convertUpdateAnswers[],
+        resultId: number,
+        questionId: string
+    ) {
+        if (Array.isArray(answer)) {
+            this.#convertUpdateAnswersArray(
+                answer,
+                answerDetails,
+                convertedAnswers,
+                resultId,
+                questionId
+            );
+        } else {
+            convertedAnswers.push(
+                this.#convertUpdateAnswer(
+                    resultId,
+                    answer,
+                    answerDetails,
+                    questionId
+                )
+            );
+        }
+    }
+
+    #convertUpdateAnswersArray(
+        answers: string[],
+        answerDetails: Answers,
+        convertedAnswers: convertUpdateAnswers[],
+        resultId: number,
+        questionId: string
+    ) {
+        answers.forEach((answer) => {
+            convertedAnswers.push(
+                this.#convertUpdateAnswer(
+                    resultId,
+                    answer,
+                    answerDetails,
+                    questionId
+                )
+            );
+        });
     }
 
     #convertUpdateAnswer(
@@ -346,13 +381,11 @@ export class AnswerService {
             });
     }
 
-    async #findAnswerInfo(resultId: number) {
-        const answer = await Answers.findOne({
+    async #findAnswerDetails(resultId: number) {
+        const answers = await Answers.findAll({
             where: { resultId },
-            attributes: ["createdAt", "formId", "inStatistic", "userId"],
         });
-        if (!answer) throw new Error("There is no such Answer");
-        return answer;
+        return answers;
     }
 
     async #findResultId(transaction: Transaction) {
