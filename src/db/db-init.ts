@@ -10,4 +10,4 @@ export const dbInit = async () => {
     initAssociations();
     await initCollections();
     await syncTypesense();
-};
+}; 

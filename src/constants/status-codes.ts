@@ -5,5 +5,6 @@ export const statusCodes = new Map<unknown, number>([
     ["invalid token", 401],
     ["jwt expired", 401],
     ["jwt malformed", 401],
-    ["Rights Error", 403]
+    ["Rights Error", 403],
+    ["SF Auth Error", 401],
 ]);

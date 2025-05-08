@@ -25,6 +25,10 @@ import { postFormController } from "../controllers/form/post-form-controller.js"
 import { githubAuthController } from "../controllers/github/github-auth-controller.js";
 import { githubCallbackController } from "../controllers/github/github-callback-controller.js";
 import { githubTokensController } from "../controllers/github/github-tokens-controller.js";
+import { getSalesforceController } from "../controllers/salesforce-controller/get-salesforce-controller.js";
+import { salesforceRegisterController } from "../controllers/salesforce-controller/salesforce-register-controller.js";
+import { salesforceCallback } from "../controllers/salesforce-controller/salesforce-callback.js";
+import { putSalesforceController } from "../controllers/salesforce-controller/put-salesforce-controller.js";
 
 export const router = Router();
 
@@ -59,3 +63,11 @@ router.get("/search_form", searchFormController);
 router.get("/auth/github", githubAuthController);
 router.get("/auth/github/callback", githubCallbackController);
 router.get("/auth/github/tokens", githubTokensController);
+router.get("/salesforce", authMiddleware, getSalesforceController);
+router.put("/salesforce", authMiddleware, putSalesforceController);
+router.get(
+    "/salesforce-register",
+    authMiddleware,
+    salesforceRegisterController
+);
+router.get("/salesforce/callback", salesforceCallback);
