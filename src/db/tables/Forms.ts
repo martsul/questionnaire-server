@@ -24,7 +24,7 @@ export class Forms extends Model {
     declare Tags: Tags[];
     declare Questions: Questions[];
     declare Comments: Comments[];
-    declare FormUsers: FormUser[]
+    declare FormUsers: FormUser[];
 }
 
 Forms.init(

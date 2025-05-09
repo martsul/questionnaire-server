@@ -6,5 +6,6 @@ export const statusCodes = new Map<unknown, number>([
     ["jwt expired", 401],
     ["jwt malformed", 401],
     ["Rights Error", 403],
-    ["SF Auth Error", 401],
+    ["SF Auth Error", 400],
+    ["Api Time Error", 429],
 ]);

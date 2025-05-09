@@ -23,7 +23,7 @@ export class SalesforceCallbackService {
             result.instance_url,
             user
         );
-        await this.#updateDbUser(result.refresh_token, contact.id);
+        await this.#updateDbUser(result.refresh_token, contact?.id);
     }
 
     async #findUser() {
@@ -39,6 +39,7 @@ export class SalesforceCallbackService {
         instanceUrl: string,
         user: Users
     ) {
+        if (user.salesforceRegistered) return;
         const response = await this.#queryCreateContact(
             accessToken,
             instanceUrl,
@@ -71,15 +72,21 @@ export class SalesforceCallbackService {
         );
     }
 
-    async #updateDbUser(refreshToken: string, sfId: string) {
-        await Users.update(
-            {
+    async #updateDbUser(refreshToken: string, sfId?: string) {
+        const updateData = this.#getUpdateData(refreshToken, sfId);
+        await Users.update(updateData, { where: { id: this.#userId } });
+    }
+
+    #getUpdateData(refreshToken: string, sfId?: string) {
+        return sfId
+            ? {
                 salesforceRegistered: true,
                 salesforceRefreshToken: refreshToken,
                 sfId,
-            },
-            { where: { id: this.#userId } }
-        );
+            }
+            : {
+                salesforceRefreshToken: refreshToken,
+            };
     }
 
     async #queryUser() {

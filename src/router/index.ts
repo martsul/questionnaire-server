@@ -29,6 +29,7 @@ import { getSalesforceController } from "../controllers/salesforce-controller/ge
 import { salesforceRegisterController } from "../controllers/salesforce-controller/salesforce-register-controller.js";
 import { salesforceCallback } from "../controllers/salesforce-controller/salesforce-callback.js";
 import { putSalesforceController } from "../controllers/salesforce-controller/put-salesforce-controller.js";
+import { getOdooApiKey } from "../controllers/get-odoo-api-key.js";
 
 export const router = Router();
 
@@ -71,3 +72,4 @@ router.get(
     salesforceRegisterController
 );
 router.get("/salesforce/callback", salesforceCallback);
+router.get("/odoo_api_key", authMiddleware, getOdooApiKey);

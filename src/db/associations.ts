@@ -10,6 +10,7 @@ import { Questions } from "./tables/Questions.js";
 import { Likes } from "./tables/Likes.js";
 import { Comments } from "./tables/Comments.js";
 import { Answers } from "./tables/Answers.js";
+import { OdooTokens } from "./tables/Odoo-Tokens.js";
 
 Users.hasOne(Tokens, {
     foreignKey: "userId",
@@ -41,6 +42,11 @@ Users.hasMany(Comments, {
 
 Users.hasMany(Answers, {
     foreignKey: "userId",
+    sourceKey: "id",
+});
+
+Users.hasMany(OdooTokens, {
+    foreignKey: "ownerId",
     sourceKey: "id",
 });
 
@@ -113,8 +119,8 @@ Forms.belongsToMany(Users, {
 
 Forms.hasMany(FormUser, {
     foreignKey: "formId",
-    sourceKey: "id"
-})
+    sourceKey: "id",
+});
 
 Tags.belongsToMany(Forms, {
     through: FormTag,
@@ -182,6 +188,11 @@ Answers.belongsTo(Forms, {
     foreignKey: "formId",
     targetKey: "id",
     onDelete: "CASCADE",
+});
+
+OdooTokens.belongsTo(Users, {
+    foreignKey: "ownerId",
+    targetKey: "id",
 });
 
 syncDatabase();
