@@ -7,6 +7,7 @@ export class OdooTokens extends Model {
     declare api: string;
     declare userId: number;
     declare createdAt: Date;
+    declare User: Users;
 }
 
 OdooTokens.init(
