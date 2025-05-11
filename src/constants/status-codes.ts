@@ -8,4 +8,5 @@ export const statusCodes = new Map<unknown, number>([
     ["Rights Error", 403],
     ["SF Auth Error", 400],
     ["Api Time Error", 429],
+    ["Unknown Odoo Api Key", 404],
 ]);

@@ -7,31 +7,25 @@ import { cloudConnect } from "./db/cloud-connect.js";
 import { Server } from "http";
 import { wsInit } from "./ws/index.js";
 import { dbInit } from "./db/db-init.js";
+import { corsOptions } from "./helpers/origin-options.js";
 
 dotenv.config();
 
-const PORT = process.env.PORT || 10000;
+const PORT = Number(process.env.PORT || 10000);
 
 const app = express();
 
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded());
 app.use(cookieParser());
-app.use(
-    cors({
-        origin: process.env.CLIENT_URL,
-        credentials: true,
-        methods: ["GET", "POST", "PUT", "DELETE"],
-        allowedHeaders: ["Content-Type", "Authorization"],
-    })
-);
+app.use(cors(corsOptions));
 app.use("/api", router);
 
 (async () => {
     try {
         cloudConnect();
         await dbInit();
-        const server: Server = app.listen(PORT, () => {
+        const server: Server = app.listen(PORT, "0.0.0.0", () => {
             console.log(`Server is running on port ${PORT}`);
         });
         wsInit(server);

@@ -17,6 +17,10 @@ export class Answers extends Model {
     declare answerCount: number;
     declare Question: Questions;
     declare Form: Forms;
+    declare min: number;
+    declare max: number;
+    declare average: number;
+    declare count: number;
 }
 
 Answers.init(
