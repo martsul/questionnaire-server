@@ -2,6 +2,7 @@ import { config } from "dotenv";
 import { SfUser } from "../types/sf-user.js";
 import { Users } from "../db/tables/Users.js";
 import { UnknownUserError } from "../errors/unknown-user-error.js";
+import { SfAccount } from "../types/sf-account.js";
 
 config();
 
@@ -18,12 +19,58 @@ export class SalesforceCallbackService {
         const user = await this.#findUser();
         const response = await this.#queryUser();
         const result: SfUser = await response.json();
-        const contact = await this.#createContact(
-            result.access_token,
-            result.instance_url,
+        const contact = await this.#registerAccountAndContact(result, user);
+        await this.#updateDbUser(result.refresh_token, contact?.id);
+    }
+
+    async #registerAccountAndContact(sfUser: SfUser, userData: Users) {
+        const account = await this.#createAccount(
+            sfUser.access_token,
+            sfUser.instance_url,
+            userData
+        );
+        return await this.#createContact(
+            sfUser.access_token,
+            sfUser.instance_url,
+            userData,
+            account.id
+        );
+    }
+
+    async #createAccount(
+        accessToken: string,
+        instanceUrl: string,
+        user: Users
+    ) {
+        const response = await this.#queryCreateAccount(
+            accessToken,
+            instanceUrl,
             user
         );
-        await this.#updateDbUser(result.refresh_token, contact?.id);
+        if (!response.ok) {
+            throw new Error("Create Account Error");
+        }
+        return (await response.json()) as SfAccount;
+    }
+
+    async #queryCreateAccount(
+        accessToken: string,
+        instanceUrl: string,
+        user: Users
+    ) {
+        return await fetch(
+            `${instanceUrl}/services/data/v60.0/sobjects/Account`,
+            {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    Name: `${user.name}'s Account`,
+                }),
+            }
+        );
     }
 
     async #findUser() {
@@ -37,13 +84,15 @@ export class SalesforceCallbackService {
     async #createContact(
         accessToken: string,
         instanceUrl: string,
-        user: Users
+        user: Users,
+        accountId: string
     ) {
         if (user.salesforceRegistered) return;
         const response = await this.#queryCreateContact(
             accessToken,
             instanceUrl,
-            user
+            user,
+            accountId
         );
         if (!response.ok) {
             throw new Error("Create Contact Error");
@@ -54,7 +103,8 @@ export class SalesforceCallbackService {
     async #queryCreateContact(
         accessToken: string,
         instanceUrl: string,
-        user: Users
+        user: Users,
+        accountId: string
     ) {
         return await fetch(
             `${instanceUrl}/services/data/v60.0/sobjects/Contact`,
@@ -67,6 +117,7 @@ export class SalesforceCallbackService {
                 body: JSON.stringify({
                     LastName: user.name,
                     Email: user.email,
+                    AccountId: accountId,
                 }),
             }
         );
@@ -80,13 +131,13 @@ export class SalesforceCallbackService {
     #getUpdateData(refreshToken: string, sfId?: string) {
         return sfId
             ? {
-                salesforceRegistered: true,
-                salesforceRefreshToken: refreshToken,
-                sfId,
-            }
+                  salesforceRegistered: true,
+                  salesforceRefreshToken: refreshToken,
+                  sfId,
+              }
             : {
-                salesforceRefreshToken: refreshToken,
-            };
+                  salesforceRefreshToken: refreshToken,
+              };
     }
 
     async #queryUser() {
