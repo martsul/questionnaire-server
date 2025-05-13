@@ -31,6 +31,7 @@ import { salesforceCallback } from "../controllers/salesforce-controller/salesfo
 import { putSalesforceController } from "../controllers/salesforce-controller/put-salesforce-controller.js";
 import { getOdooApiKey } from "../controllers/odoo/get-odoo-api-key.js";
 import { postOdooApiKey } from "../controllers/odoo/post-odoo-api-key.js";
+import { powerAutomateController } from "../controllers/power-automate-controller.js";
 
 export const router = Router();
 
@@ -75,3 +76,4 @@ router.get(
 router.get("/salesforce/callback", salesforceCallback);
 router.get("/odoo_api_key", authMiddleware, getOdooApiKey);
 router.post("/odoo_api_key", postOdooApiKey);
+router.post("/support", powerAutomateController);
