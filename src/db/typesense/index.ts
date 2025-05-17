@@ -5,7 +5,7 @@ config();
 
 export const typesenseClient = new Typesense.Client({
     nodes: [
-        { host: "quiz-typesense.onrender.com", port: 443, protocol: "https" },
+        { host: process.env.TYPESENSE_URL as string, port: 443, protocol: "https" },
     ],
     apiKey: process.env.TYPESENSE_API_KEY as string,
 });
