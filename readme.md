@@ -71,9 +71,13 @@ Registered users can create surveys and forms with:
 ## 🤝 Integrations
 
 - 🔗 **Salesforce**:
-  - Create accounts and contacts directly from the platform
+  - Create accounts and contacts directly from the platform  
+  ▶️ [Watch demo](https://youtu.be/KhEgXI5VNvQ)
+  
 - 🧾 **Odoo**:
-  - Generate API keys and retrieve statistics for forms directly in Odoo
+  - Generate API keys and retrieve statistics for forms directly in Odoo  
+  ▶️ [Watch demo](https://youtu.be/x7seuGQjI-c)
+  
 - 📬 **Power Automate**:
-  - Support requests are sent in JSON format, processed, emailed to the admin, and trigger notifications via Power Automate
-
+  - Support requests are sent in JSON format, processed, emailed to the admin, and trigger notifications via Power Automate  
+  ▶️ [Watch demo](https://youtu.be/JruzkLKvd_M)
